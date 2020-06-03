@@ -17,7 +17,7 @@ class ProductScheduleExport implements FromCollection, WithHeadings
     use Exportable;
     public function collection()
     {
-        return DB::table('product_schedules')->select('id','schedule_name','regular_price','sale_price','width','length')->get();
+        return DB::table('product_schedules')->select('id','schedule_name','category_name','regular_price','sale_price','width','length')->get();
     }
 
     public function headings(): array
@@ -25,6 +25,7 @@ class ProductScheduleExport implements FromCollection, WithHeadings
         return [
             'id',
             'Schedule Name',
+            'Category Name',
             'Regular Price',
             'Sale Price',
             'Width',

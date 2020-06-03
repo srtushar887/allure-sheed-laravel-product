@@ -13,7 +13,7 @@
     <link rel="icon" href="{{asset($gn->icon)}}">
 
     <!-- CSS
-    ============================================ -->
+	============================================ -->
     <!-- Bootstrap CSS -->
     <link href="{{asset('assets/frontend/')}}/css/bootstrap.min.css" rel="stylesheet">
 
@@ -177,7 +177,7 @@
                     <!--=======  logo   =======-->
 
                     <div class="logo">
-                        <a href="index.html">
+                        <a href="{{route('shop')}}">
                             <img src="{{asset($gn->logo)}}" style="height: 50px;width: 175px" class="img-fluid" alt="">
                         </a>
                     </div>
@@ -193,19 +193,19 @@
                     <div class="site-main-nav d-none d-lg-block">
                         <nav class="site-nav center-menu">
                             <ul>
-                                <li class="menu-item"><a href="{{route('front')}}">Home</a>
-                                </li>
+{{--                                <li class="menu-item"><a href="{{route('front')}}">Home</a>--}}
+{{--                                </li>--}}
                                 <?php
                                 $categories = \App\product::distinct()->select('category')->get();
                                 ?>
-                                <li class="menu-item-has-children"><a href="javascript:void(0)">Categories</a>
+                                <li class="menu-item-has-children"><a href="{{route('shop')}}">Shop</a>
                                     <ul class="sub-menu single-column-menu">
                                         @foreach($categories as $fcat)
-                                        <li><a href="{{route('category.product',$fcat->category)}}">{{$fcat->category}}</a></li>
-                                            @endforeach
+                                            <li><a href="{{route('category.product',$fcat->category)}}">{{$fcat->category}}</a></li>
+                                        @endforeach
                                     </ul>
                                 </li>
-                                <li class="menu-item"><a href="{{route('shop')}}">Shop</a>
+{{--                                <li class="menu-item"><a href="{{route('shop')}}">Shop</a>--}}
                                 </li>
                                 <li class="menu-item"><a href="{{route('about.us')}}">About Us</a>
                                 </li>
@@ -258,6 +258,13 @@
                             <a href="javascript:void(0)" id="offcanvas-cart-icon">
                                 <i class="ion-ios-cart"></i>
                                 <span class="count">{{$counts}}</span>
+                            </a>
+                        </div>
+
+                        <div class="single-icon wishlist">
+                            <a href="javascript:void(0)" id="offcanvas-wishlist-icon">
+                                <i class="ion-android-favorite-outline"></i>
+                                <span class="count">0</span>
                             </a>
                         </div>
                         <!--=======  End of single-icon  =======-->
@@ -741,15 +748,15 @@
                         @foreach($carts as $pro)
                     <div class="single-cart-product">
 							<span class="cart-close-icon">
-								<a href="#"><i class="ti-close"></i></a>
+								<a href="{{route('cart.delete',$pro->rowId)}}"><i class="ti-close"></i></a>
 							</span>
                         <div class="image">
-                            <a href="shop-product-basic.html">
+                            <a href="{{route('product.view',$pro->id)}}">
                                 <img src="{{asset($pro->options->image)}}" class="img-fluid" alt="">
                             </a>
                         </div>
                         <div class="content">
-                            <h5><a href="shop-product-basic.html">{{$pro->name}}</a></h5>
+                            <h5><a href="{{route('product.view',$pro->id)}}">{{$pro->name}}</a></h5>
                             <p><span class="cart-count">{{$pro->qty}} x </span> <span class="discounted-price">${{$pro->price}}</span></p>
 
                         </div>
@@ -832,84 +839,6 @@
 =            quick view         =
 =============================================-->
 
-<div id="qv-1" class="cd-quick-view">
-    <div class="cd-slider-wrapper">
-        <ul class="cd-slider">
-            <li class="selected"><img src="{{asset('assets/frontend/')}}/images/products/cloth-1-2-600x800.jpg" alt="Product 2"></li>
-            <li><img src="{{asset('assets/frontend/')}}/images/products/cloth-1-1-600x800.jpg" alt="Product 1"></li>
-        </ul> <!-- cd-slider -->
-
-        <ul class="cd-slider-pagination">
-            <li class="active"><a href="#0">1</a></li>
-            <li><a href="#1">2</a></li>
-        </ul> <!-- cd-slider-pagination -->
-
-        <ul class="cd-slider-navigation">
-            <li><a class="cd-prev" href="#0">Prev</a></li>
-            <li><a class="cd-next" href="#0">Next</a></li>
-        </ul> <!-- cd-slider-navigation -->
-    </div> <!-- cd-slider-wrapper -->
-
-    <div class="lezada-item-info cd-item-info ps-scroll">
-
-        <h2 class="item-title">High Waist Trousers</h2>
-        <p class="price">
-            <span class="main-price discounted">$360.00</span>
-            <span class="discounted-price">$300.00</span>
-        </p>
-
-        <p class="description">Hurley Dry-Fit Chino Short. Men's chino short. Outseam Length: 19 Dri-FIT Technology helps keep you dry and comfortable. Made with sweat-wicking fabric. Fitted waist with belt loops. Button waist with zip fly provides a classic look and feel .</p>
-
-        <span class="quickview-title">Quantity:</span>
-        <div class="pro-qty d-inline-block mb-40">
-            <input type="text" value="1">
-        </div>
-
-        <div class="add-to-cart-btn mb-25">
-
-            <button class="lezada-button lezada-button--medium">add to cart</button>
-        </div>
-
-        <div class="quick-view-other-info">
-            <table>
-                <tr class="single-info">
-                    <td class="quickview-title">SKU: </td>
-                    <td class="quickview-value">12345</td>
-                </tr>
-                <tr class="single-info">
-                    <td class="quickview-title">Categories: </td>
-                    <td class="quickview-value">
-                        <a href="#">Fashion</a>,
-                        <a href="#">Men</a>,
-                        <a href="#">Sunglasses</a>
-                    </td>
-                </tr>
-                <tr class="single-info">
-                    <td class="quickview-title">Tags: </td>
-                    <td class="quickview-value">
-                        <a href="#">Fashion</a>,
-                        <a href="#">Men</a>
-                    </td>
-                </tr>
-                <tr class="single-info">
-                    <td class="quickview-title">Share on: </td>
-                    <td class="quickview-value">
-                        <ul class="quickview-social-icons">
-                            <li><a href="#"><i class="fa fa-facebook"></i></a></li>
-                            <li><a href="#"><i class="fa fa-twitter"></i></a></li>
-                            <li><a href="#"><i class="fa fa-google-plus"></i></a></li>
-                            <li><a href="#"><i class="fa fa-pinterest"></i></a></li>
-                        </ul>
-                    </td>
-                </tr>
-            </table>
-        </div>
-
-
-    </div> <!-- cd-item-info -->
-    <a href="#0" class="cd-close">Close</a>
-</div>
-
 <!--=====  End of quick view  ======-->
 
 <!-- scroll to top  -->
@@ -946,6 +875,22 @@
 <script type="text/javascript" src="{{asset('assets/frontend/')}}/revolution/js/extensions/revolution.extension.navigation.min.js"></script>
 <script type="text/javascript" src="{{asset('assets/frontend/')}}/revolution/js/extensions/revolution.extension.parallax.min.js"></script>
 @yield('js')
+
+
+<!--Start of Tawk.to Script-->
+<script type="text/javascript">
+    var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+    (function(){
+        var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+        s1.async=true;
+        s1.src='https://embed.tawk.to/5eb39303a1bad90e54a27147/default';
+        s1.charset='UTF-8';
+        s1.setAttribute('crossorigin','*');
+        s0.parentNode.insertBefore(s1,s0);
+    })();
+</script>
+<!--End of Tawk.to Script-->
+
 </body>
 
 

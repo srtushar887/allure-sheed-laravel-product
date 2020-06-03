@@ -19,7 +19,7 @@ class FrontendController extends Controller
     public function index()
     {
         $slider = slider::all();
-        $poduct_random = product::inRandomOrder()->get();
+        $poduct_random = product::inRandomOrder()->limit(20)->orderBy('id','desc')->get();
         $product = product::inRandomOrder()->limit(15)->get();
         $static = static_data::first();
         return view('frontend.index',compact('slider','poduct_random','product','static'));
@@ -29,14 +29,15 @@ class FrontendController extends Controller
 
     public function shop()
     {
-        $product = product::paginate(20);
-        $resent_produt = product::inRandomOrder()->limit(3)->get();
+
+        $product = product::orderBy('product_name')->paginate(20);
+        $resent_produt = product::inRandomOrder()->limit(3)->orderBy('product_name')->get();
         return view('frontend.shop',compact('product','resent_produt'));
     }
 
     public function get_product(Request $request)
     {
-        $query="SELECT * FROM products";
+        $query="SELECT * FROM products ORDER BY 'product_name' ";
         $query_exe = DB::select($query);
 
         $product = $this->arrayPaginator($query_exe, $request);
@@ -49,7 +50,7 @@ class FrontendController extends Controller
 
     public function get_product_get(Request $request)
     {
-        $query="SELECT * FROM products";
+        $query="SELECT * FROM products ORDER BY 'product_name' ";
         $query_exe = DB::select($query);
 
         $product = $this->arrayPaginator($query_exe, $request);
@@ -95,9 +96,12 @@ class FrontendController extends Controller
     public function get_product_by_category(Request $request)
     {
         $cat = $request->catagory;
-        $query="SELECT * FROM products  WHERE category is not null ";
+
+        $query="SELECT * FROM products  WHERE category is not null  ";
+
 
         if (empty($cat)){
+            $query .= 'ORDER BY  product_name ';
             $query_exe = DB::select($query);
         }
 
@@ -105,10 +109,10 @@ class FrontendController extends Controller
         {
             $CAT_filter = implode("','", $cat);
             $query .= "AND category IN ('".$CAT_filter."') ";
+            $query .= 'ORDER BY  product_name ';
             $query_exe = DB::select($query);
 
         }
-
 
 
         $product = $this->arrayPaginator($query_exe, $request);
@@ -123,9 +127,10 @@ class FrontendController extends Controller
     public function get_product_by_category_get(Request $request)
     {
         $cat = $request->catagory;
-        $query="SELECT * FROM products  WHERE category is not null ";
+        $query="SELECT * FROM products  WHERE category is not null  ";
 
         if (empty($cat)){
+            $query .= ' ORDER BY  product_name ';
             $query_exe = DB::select($query);
         }
 
@@ -133,10 +138,10 @@ class FrontendController extends Controller
         {
             $CAT_filter = implode("','", $cat);
             $query .= "AND category IN ('".$CAT_filter."') ";
+            $query .= ' ORDER BY  product_name ';
             $query_exe = DB::select($query);
 
         }
-
 
 
         $product = $this->arrayPaginator($query_exe, $request);
@@ -145,6 +150,15 @@ class FrontendController extends Controller
             'view' =>View::make('frontend.include.productSingle',compact('product'))->render(),
             'pagination'=> (string) $product->links()
         ]);
+    }
+
+
+
+    public function categories()
+    {
+        $product = product::paginate(20);
+        $resent_produt = product::inRandomOrder()->limit(3)->get();
+        return view('frontend.categories',compact('product','resent_produt'));
     }
 
 
@@ -163,22 +177,27 @@ class FrontendController extends Controller
     public function product_details($name)
     {
         $product_details = product::where('id',$name)->first();
+
+
         return view('frontend.productDetails',compact('product_details'));
     }
 
     public function category_product($cat)
     {
-
-
         $id = $cat;
-        $product = product::where('product_name',$cat)->paginate(20);
+        $cat_pro = product::where('id',$id)->first();
+        $product = product::where('category',$cat)->paginate(20);
         $resent_produt = product::inRandomOrder()->limit(3)->get();
-        return view('frontend.categoryProduct',compact('id','product','resent_produt'));
+        return view('frontend.categoryProduct',compact('id','product','resent_produt','cat_pro'));
     }
 
     public function product_price_get(Request $request)
     {
-        $product_price = product_schedule::where('schedule_name',$request->schedule)->where('width',$request->width)->where('length',$request->length)->first();
+        $product_price = product_schedule::where('schedule_name',$request->schedule)
+            ->where('width',$request->width)
+            ->where('length',$request->length)
+            ->where('category_name',$request->catname)
+            ->first();
         return response($product_price);
     }
 
@@ -225,6 +244,14 @@ class FrontendController extends Controller
 
     public function cart_delete($id)
     {
+        Cart::remove($id);
+        return back();
+    }
+
+    public function cart_frm_delete(Request $request)
+    {
+
+        $id = $request->rowid;
         Cart::remove($id);
         return back();
     }

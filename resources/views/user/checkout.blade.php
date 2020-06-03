@@ -405,7 +405,7 @@
                                                             <li>
                                                                 {{$pro->name}} X {{$pro->qty}} <span>${{$pro->price}}</span>
                                                                 <br>
-                                                                Option <span>ss</span>
+                                                                <strong>Addon Accessories:</strong> <span></span>
                                                                 @if ($pro->options->blinds1 != "")
                                                                     <br>
                                                                     Square or Louvolite fascia <span>${{$pro->options->blinds1}}</span>

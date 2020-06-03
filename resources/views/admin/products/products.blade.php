@@ -38,9 +38,9 @@
                         <tr>
                             <th>Schedule Name</th>
                             <th>Product Name</th>
-                            <th>Product Image</th>>
-                            <th>Category</th>>
-                            <th>Tags</th>>
+                            <th>Product Image</th>
+                            <th>Category</th>
+                            <th>Tags</th>
                             <th>action</th>
                         </tr>
                         </thead>

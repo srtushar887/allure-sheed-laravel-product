@@ -55,17 +55,17 @@
     </style>
 @stop
 @section('front')
-    <div class="breadcrumb-area breadcrumb-bg-2 pt-50 pb-70">
+    <div class="breadcrumb-area breadcrumb-bg-2 pt-50 pb-70" style="background-image: url('https://32uj573t79yhqdjjt91jtwpf-wpengine.netdna-ssl.com/wp-content/uploads/2016/06/Untitled-design-5.png');height: 250px;">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
-                    <h1 class="breadcrumb-title">Shop</h1>
+                    <h1 class="breadcrumb-title">{{$id}}</h1>
 
                     <!--=======  breadcrumb list  =======-->
 
                     <ul class="breadcrumb-list">
-                        <li class="breadcrumb-list__item"><a href="index.html">HOME</a></li>
-                        <li class="breadcrumb-list__item breadcrumb-list__item--active">PRODUCTS</li>
+                        <li class="breadcrumb-list__item"><a href="{{route('shop')}}">HOME</a></li>
+                        <li class="breadcrumb-list__item breadcrumb-list__item--active">{{$id}}</li>
                     </ul>
 
                     <!--=======  End of breadcrumb list  =======-->
@@ -101,16 +101,16 @@
                         <div class="filter-icons">
                             <!--=======  filter dropdown  =======-->
 
-                            <div class="single-icon filter-dropdown">
-                                <select class="nice-select">
-                                    <option value="0">Default sorting</option>
-                                    <option value="1">Sort ny popularity</option>
-                                    <option value="0">Sort by average rating</option>
-                                    <option value="0">Sort by latest</option>
-                                    <option value="0">Sort by price: low to high</option>
-                                    <option value="0">Sort by price: high to low</option>
-                                </select>
-                            </div>
+{{--                            <div class="single-icon filter-dropdown">--}}
+{{--                                <select class="nice-select">--}}
+{{--                                    <option value="0">Default sorting</option>--}}
+{{--                                    <option value="1">Sort ny popularity</option>--}}
+{{--                                    <option value="0">Sort by average rating</option>--}}
+{{--                                    <option value="0">Sort by latest</option>--}}
+{{--                                    <option value="0">Sort by price: low to high</option>--}}
+{{--                                    <option value="0">Sort by price: high to low</option>--}}
+{{--                                </select>--}}
+{{--                            </div>--}}
 
                             <!--=======  End of filter dropdown  =======-->
 
@@ -183,11 +183,13 @@
                                 ?>
                                 @foreach($categories as $cat)
                                     <div class="form-group">
-                                        <input type="checkbox" class="common_selector category" {{$cat->category == $id ? "checked" : ''}} name="cat"  value="{{$cat->category}}" id="{{$cat->category}}">
+                                        <input type="checkbox" class="common_selector category" name="cat" {{$id == $cat->category ? 'checked' : ''}}  value="{{$cat->category}}" id="{{$cat->category}}">
                                         <label for="{{$cat->category}}">{{$cat->category}}</label>
                                     </div>
                                 @endforeach
                             </div>
+
+
 
                             <!--=======  End of single sidebar widget  =======-->
 
@@ -226,13 +228,23 @@
                                                     <div class="single-widget-product__content__top">
                                                         <h3 class="product-title"><a href="{{route('product.view',$reproduct->id)}}">{{$reproduct->product_name}}</a></h3>
                                                         <?php
-                                                        $min_amount = \App\product_schedule::distinct()->select('regular_price')->where('schedule_name',$reproduct->schedule_name)->min('regular_price');
-                                                        $max_amount = \App\product_schedule::distinct()->select('regular_price')->where('schedule_name',$reproduct->schedule_name)->max('regular_price');
+                                                        $min_array = array();
+
+                                                        $min_amount = \App\product_schedule::distinct()->select('regular_price')->where('schedule_name',$reproduct->schedule_name)->get();
+                                                        $min_amounta = \Illuminate\Support\Facades\DB::table('product_schedules')->select('regular_price')->where('schedule_name',$reproduct->schedule_name)->get();
+
+                                                        for ($i=0;$i<count($min_amount);$i++){
+//                                                            $am = \App\product_schedule::where('regular_price',$min_amount[$i]['regular_price'])->first();
+                                                            array_push($min_array,$min_amount[$i]['regular_price']);
+                                                        }
+
+
+
                                                         ?>
                                                         <div class="price">
 
-                                                            <span class="discounted-price">${{$min_amount}}</span> -
-                                                            <span class="discounted-price">${{$max_amount}}</span>
+                                                            <span class="discounted-price">${{min($min_array)}}</span> -
+                                                            <span class="discounted-price">${{max($min_array)}}</span>
                                                         </div>
                                                         <div class="rating">
                                                             <i class="ion-android-star"></i>
@@ -262,22 +274,22 @@
 
                             <!--=======  single sidebar widget  =======-->
 
-                            <div class="single-sidebar-widget">
-                                <h2 class="single-sidebar-widget--title">Tags</h2>
+{{--                            <div class="single-sidebar-widget">--}}
+{{--                                <h2 class="single-sidebar-widget--title">Tags</h2>--}}
 
-                                <div class="tag-container">
-                                    <a href="#">bags</a>
-                                    <a href="#">chair</a>
-                                    <a href="#">clock</a>
-                                    <a href="#">comestic</a>
-                                    <a href="#">fashion</a>
-                                    <a href="#">furniture</a>
-                                    <a href="#">holder</a>
-                                    <a href="#">mask</a>
-                                    <a href="#">men</a>
-                                    <a href="#">oil</a>
-                                </div>
-                            </div>
+{{--                                <div class="tag-container">--}}
+{{--                                    <a href="#">bags</a>--}}
+{{--                                    <a href="#">chair</a>--}}
+{{--                                    <a href="#">clock</a>--}}
+{{--                                    <a href="#">comestic</a>--}}
+{{--                                    <a href="#">fashion</a>--}}
+{{--                                    <a href="#">furniture</a>--}}
+{{--                                    <a href="#">holder</a>--}}
+{{--                                    <a href="#">mask</a>--}}
+{{--                                    <a href="#">men</a>--}}
+{{--                                    <a href="#">oil</a>--}}
+{{--                                </div>--}}
+{{--                            </div>--}}
 
                             <!--=======  End of single sidebar widget  =======-->
                         </div>
@@ -350,7 +362,7 @@
             {
                 event.preventDefault();
 
-                $("html, body").animate({ scrollTop: 0 }, "slow");
+                $("html, body").animate({ scrollTop: 500 }, "slow");
 
                 $('li').removeClass('active');
                 $(this).parent('li').addClass('active');

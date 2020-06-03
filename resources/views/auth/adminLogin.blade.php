@@ -4,13 +4,13 @@
 <!-- Mirrored from coderthemes.com/abstack/layouts/green/pages-login.html by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 29 Feb 2020 07:42:22 GMT -->
 <head>
     <meta charset="utf-8" />
-    <title>Abstack - Responsive Bootstrap 4 Admin Dashboard</title>
+    <title>{{$gn->site_name}}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description" />
     <meta content="Coderthemes" name="author" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <!-- App favicon -->
-    <link rel="shortcut icon" href="{{asset('assets/admin/')}}/images/favicon.ico">
+    <link rel="shortcut icon" href="{{asset($gn->icon)}}">
 
     <!-- App css -->
     <link href="{{asset('assets/admin/')}}/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
@@ -30,8 +30,8 @@
                     <div class="card-body p-4">
 
                         <div class="text-center w-75 m-auto">
-                            <a href="index.html">
-                                <span><img src="{{asset('assets/admin/')}}/images/logo-dark.png" alt="" height="18"></span>
+                            <a href="{{route('admin.login')}}">
+                                <span><img src="{{asset($gn->logo)}}" alt="" style="width: 135px;"></span>
                             </a>
                             <h5 class="text-uppercase text-center font-bold mt-4">Sign In</h5>
 

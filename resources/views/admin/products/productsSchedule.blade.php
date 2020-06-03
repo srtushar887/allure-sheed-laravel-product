@@ -34,6 +34,7 @@
                         <thead>
                         <tr>
                             <th>Schedule Name</th>
+                            <th>Category Name</th>
                             <th>Regular Price</th>
                             <th>sale price</th>
                             <th>width</th>
@@ -95,7 +96,7 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form action="{{route('delete.prodict')}}" method="post" enctype="multipart/form-data">
+                <form action="{{route('delete.product.schudel.all')}}" method="post" enctype="multipart/form-data">
                     @csrf
                     <div class="modal-body">
                         <div class="form-group">
@@ -128,6 +129,7 @@
                 "ajax": "{{ route('get.products.shcedule') }}",
                 columns: [
                     { data: 'schedule_name', name: 'schedule_name',class : 'text-center' },
+                    { data: 'category_name', name: 'category_name',class : 'text-center' },
                     { data: 'regular_price', name: 'regular_price',class : 'text-center' },
                     { data: 'sale_price', name: 'sale_price',class : 'text-center' },
                     { data: 'width', name: 'width',class : 'text-center' },

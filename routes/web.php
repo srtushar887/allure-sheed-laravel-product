@@ -13,17 +13,19 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', 'FrontendController@index')->name('front');
-Route::get('/shop', 'FrontendController@shop')->name('shop');
+//Route::get('/', 'FrontendController@index')->name('front');
+Route::get('/', 'FrontendController@shop')->name('shop');
 Route::post('/get-product', 'FrontendController@get_product')->name('get_product');
 Route::get('/get-product', 'FrontendController@get_product_get');
 Route::get('/product-details/{name}', 'FrontendController@product_details')->name('product.view');
-Route::get('/category-product/{cat}', 'FrontendController@category_product')->name('category.product');
+Route::get('/categories', 'FrontendController@categories')->name('categories');
+Route::get('/category-product/{id}', 'FrontendController@category_product')->name('category.product');
 Route::post('/product-price-get', 'FrontendController@product_price_get')->name('get_product_price');
 Route::post('/add-to-cart', 'FrontendController@add_to_cart')->name('add.to.cart');
 Route::get('/view-cart', 'FrontendController@view_cart')->name('view.cart');
 Route::get('/cart-update', 'FrontendController@cart_update')->name('cart.update');
 Route::get('/cart-delete/{id}', 'FrontendController@cart_delete')->name('cart.delete');
+Route::post('/cart-frm-delete', 'FrontendController@cart_frm_delete')->name('card.frm.delete');
 
 
 Route::get('/about-us', 'FrontendController@about_us')->name('about.us');
@@ -71,6 +73,8 @@ Route::group(['middleware' => ['auth:admin']], function() {
         Route::post('/create-product-save', 'Admin\AdminProductsController@create_product_save')->name('admin.create.product.save');
         Route::post('/create-product-update', 'Admin\AdminProductsController@create_product_update')->name('admin.update.product.save');
         Route::post('/create-product-delete', 'Admin\AdminProductsController@create_product_delete')->name('delete.product.single');
+        Route::get('/delete-product-color-image/{id}', 'Admin\AdminProductsController@delete_product_color_image')->name('delete.product.color.img');
+        Route::post('/product-schedule-get', 'Admin\AdminProductsController@product_shcedule_get')->name('admin.get.schedule');
 
 
         //produc schedule
@@ -78,6 +82,7 @@ Route::group(['middleware' => ['auth:admin']], function() {
         Route::get('/products-schedule-get', 'Admin\AdminProductsController@products_schedule_get')->name('get.products.shcedule');
         Route::post('/products-schedule-save', 'Admin\AdminProductsController@products_schedule_save')->name('import.product.schedule.csv');
         Route::get('/products-schedule-export', 'Admin\AdminProductsController@products_schedule_export')->name('admin.product.schedule.export');
+        Route::post('/delete-products-schedule-all', 'Admin\AdminProductsController@delete_product_schdule_all')->name('delete.product.schudel.all');
 
         //product category
         Route::get('/product-category', 'Admin\AdminProductsController@product_ctegory')->name('admin.product.category');

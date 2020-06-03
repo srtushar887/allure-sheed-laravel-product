@@ -26,6 +26,7 @@ class ProductScheduleCollection implements ToCollection, WithHeadingRow
                 'id' => $row['id'],
             ], [
                 'schedule_name' => $row['schedule_name'],
+                'category_name' => $row['category_name'],
                 'regular_price' => $row['regular_price'],
                 'sale_price' => $row['sale_price'],
                 'width' => $row['width'],

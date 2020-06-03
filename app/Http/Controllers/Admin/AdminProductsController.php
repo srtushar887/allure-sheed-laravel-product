@@ -14,6 +14,7 @@ use App\Imports\ProductScheduleCollection;
 use App\Imports\ProductScheduleImport;
 use App\order;
 use App\product;
+use App\product_color_image;
 use App\product_schedule;
 use Illuminate\Http\Request;
 use Intervention\Image\Facades\Image;
@@ -124,6 +125,13 @@ class AdminProductsController extends Controller
         return Excel::download(new ProductScheduleExport(), 'productSchedule.csv');
     }
 
+    public function delete_product_schdule_all(Request $request)
+    {
+        $product = product_schedule::query()->delete();
+
+        return back();
+    }
+
 
     public function create_product()
     {
@@ -134,6 +142,8 @@ class AdminProductsController extends Controller
 
     public function create_product_save(Request $request)
     {
+
+
         $product = new product();
         if($request->hasFile('product_image')){
             $image = $request->file('product_image');
@@ -150,8 +160,29 @@ class AdminProductsController extends Controller
         $product->category = $request->category;
         $product->tags = $request->tags;
         $product->schedule_name = $request->schedule_name;
-        $product->save();
 
+        if ($product->save()){
+
+                $porclname = $request->color_name;
+                $porclimg = $request->filename;
+                for ($i=0;$i<count($porclname);$i++){
+                    $new_procolor = new product_color_image();
+                    if($request->hasFile('filename')){
+                            $file = $request->filename[$i];
+                            $filename=$file->getClientOriginalName();
+                            $name  = $product->id.uniqid().$filename;
+                            $file->move(public_path().'/assets/admin/images/productcolorimage/', $name);
+                            $new_procolor->color_image =  $name;
+                            $new_procolor->save();
+                    }
+
+                    $new_procolor->product_id =  $product->id;
+                    $new_procolor->color_name =  $porclname[$i];
+                    $new_procolor->save();
+            }
+
+
+        }
         return back()->with('success','Product Create Successfull');
 
 
@@ -185,7 +216,34 @@ class AdminProductsController extends Controller
         $pro_up->category = $request->category;
         $pro_up->tags = $request->tags;
         $pro_up->schedule_name = $request->schedule_name;
-        $pro_up->save();
+
+
+        if ($pro_up->save()) {
+
+            $porclname = $request->color_name;
+
+            if ($porclname) {
+                for ($i = 0; $i < count($porclname); $i++) {
+                    $new_procolor = new product_color_image();
+
+                    if ($request->hasFile('filename')) {
+
+                        $file = $request->filename[$i];
+                        $filename = $file->getClientOriginalName();
+                        $name = $pro_up->id . uniqid() . $filename;
+                        $file->move(public_path() . '/assets/admin/images/productcolorimage/', $name);
+                        $new_procolor->color_image = $name;
+                        $new_procolor->save();
+                    }
+
+
+                    $new_procolor->product_id = $pro_up->id;
+                    $new_procolor->color_name = $porclname[$i];
+                    $new_procolor->save();
+                }
+            }
+
+        }
 
         return back()->with('success','Product Updated Successfully');
     }
@@ -198,6 +256,13 @@ class AdminProductsController extends Controller
         $del_pro->delete();
         return back()->with('success','Product Deleted Successfully');
 
+    }
+
+    public function delete_product_color_image($id)
+    {
+        $delete_col_img = product_color_image::where('id',$id)->first();
+        $delete_col_img->delete();
+        return back();
     }
 
     public function product_ctegory()
@@ -308,6 +373,16 @@ class AdminProductsController extends Controller
             $order_save->save();
             return back()->with('success','Order Canceled');
         }
+    }
+
+
+    public function product_shcedule_get(Request $request)
+    {
+        $sche =  $schedule = product_schedule::distinct()->select('schedule_name')
+            ->where('category_name',$request->catid)
+            ->get();
+
+        return response($sche);
     }
 
 

@@ -49,12 +49,12 @@
                                 @foreach($carts as $pro)
                             <tr>
                                 <td class="product-thumbnail">
-                                    <a href="shop-product-basic.html">
+                                    <a href="{{route('product.view',$pro->id)}}">
                                         <img src="{{asset($pro->options->image)}}" class="img-fluid" alt="">
                                     </a>
                                 </td>
                                 <td class="product-name">
-                                    <a href="shop-product-basic.html">{{$pro->name}}</a>
+                                    <a href="{{route('product.view',$pro->id)}}">{{$pro->name}}</a>
                                 </td>
 
                                 <td class="product-price"><span class="price">${{$pro->price}}</span></td>
@@ -72,14 +72,25 @@
 
                                 <td class="product-remove">
                                     <button class="btn btn-primary" type="submit">
-                                        <i class="fa fa-edit"></i>
+                                        Update
                                     </button>
                                 </td>
+                                </form>
+                                        <form action="{{route('card.frm.delete')}}" method="post">
+                                            @csrf
                                 <td class="product-remove">
-                                    <button class="btn btn-danger" type="submit">
-                                        <i class="ion-android-close"></i>
-                                    </button>
+                                    <input type="hidden" name="rowid" value="{{$pro->rowId}}">
+
+                                        <button class="btn btn-danger" type="submit">
+
+                                            Remove
+
+                                        </button>
+
+
                                 </td>
+
+
                                 </form>
                             </tr>
                                 @endforeach

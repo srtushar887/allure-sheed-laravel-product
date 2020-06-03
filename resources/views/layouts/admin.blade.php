@@ -242,7 +242,6 @@
 <script src="{{asset('assets/admin/')}}/libs/chart-js/Chart.bundle.min.js"></script>
 
 <!-- Init js -->
-<script src="{{asset('assets/admin/')}}/js/pages/dashboard.init.js"></script>
 
 <!-- App js -->
 <script src="{{asset('assets/admin/')}}/js/app.min.js"></script>

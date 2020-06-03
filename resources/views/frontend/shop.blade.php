@@ -55,7 +55,7 @@
     </style>
 @stop
 @section('front')
-    <div class="breadcrumb-area breadcrumb-bg-2 pt-50 pb-70">
+    <div class="breadcrumb-area breadcrumb-bg-2 pt-50 pb-70" style="background-image: url('https://32uj573t79yhqdjjt91jtwpf-wpengine.netdna-ssl.com/wp-content/uploads/2016/06/Untitled-design-5.png');height: 250px;">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
@@ -64,7 +64,7 @@
                     <!--=======  breadcrumb list  =======-->
 
                     <ul class="breadcrumb-list">
-                        <li class="breadcrumb-list__item"><a href="index.html">HOME</a></li>
+                        <li class="breadcrumb-list__item"><a href="{{route('shop')}}">HOME</a></li>
                         <li class="breadcrumb-list__item breadcrumb-list__item--active">PRODUCTS</li>
                     </ul>
 
@@ -101,16 +101,16 @@
                         <div class="filter-icons">
                             <!--=======  filter dropdown  =======-->
 
-                            <div class="single-icon filter-dropdown">
-                                <select class="nice-select">
-                                    <option value="0">Default sorting</option>
-                                    <option value="1">Sort ny popularity</option>
-                                    <option value="0">Sort by average rating</option>
-                                    <option value="0">Sort by latest</option>
-                                    <option value="0">Sort by price: low to high</option>
-                                    <option value="0">Sort by price: high to low</option>
-                                </select>
-                            </div>
+{{--                            <div class="single-icon filter-dropdown">--}}
+{{--                                <select class="nice-select">--}}
+{{--                                    <option value="0">Default sorting</option>--}}
+{{--                                    <option value="1">Sort ny popularity</option>--}}
+{{--                                    <option value="0">Sort by average rating</option>--}}
+{{--                                    <option value="0">Sort by latest</option>--}}
+{{--                                    <option value="0">Sort by price: low to high</option>--}}
+{{--                                    <option value="0">Sort by price: high to low</option>--}}
+{{--                                </select>--}}
+{{--                            </div>--}}
 
                             <!--=======  End of filter dropdown  =======-->
 
@@ -123,7 +123,7 @@
                             <!--=======  advance filter icon  =======-->
 
                             <div class="single-icon advance-filter-icon">
-{{--                                <a href="javascript:void(0)" id="advance-filter-active-btn"><i class="ion-android-funnel"></i> Filters</a>--}}
+                                {{--                                <a href="javascript:void(0)" id="advance-filter-active-btn"><i class="ion-android-funnel"></i> Filters</a>--}}
                             </div>
 
                             <!--=======  End of advance filter icon  =======-->
@@ -179,15 +179,41 @@
                             <div class="single-sidebar-widget mb-40">
                                 <h2 class="single-sidebar-widget--title">Categories</h2>
                                 <?php
-                                    $categories = \App\product::distinct()->select('category')->get();
+                                $categories = \App\product::distinct()->select('category')->get();
                                 ?>
                                 @foreach($categories as $cat)
-                                <div class="form-group">
-                                    <input type="checkbox" class="common_selector category" name="cat"  value="{{$cat->category}}" id="{{$cat->category}}">
-                                    <label for="{{$cat->category}}">{{$cat->category}}</label>
-                                </div>
-                                    @endforeach
+                                    <div class="form-group">
+                                        <input type="checkbox" class="common_selector category" name="cat"  value="{{$cat->category}}" id="{{$cat->category}}">
+                                        <label for="{{$cat->category}}">{{$cat->category}}</label>
+                                    </div>
+                                @endforeach
                             </div>
+
+{{--                            <div class="single-sidebar-widget mb-40">--}}
+{{--                                <h2 class="single-sidebar-widget--title">Price</h2>--}}
+{{--                                    <div class="form-group">--}}
+{{--                                        <input type="checkbox" class="common_selector price1" name="price"  value="500" id="">--}}
+{{--                                        <label for="">$150 - $500</label>--}}
+{{--                                    </div>--}}
+{{--                                <div class="form-group">--}}
+{{--                                    <input type="checkbox" class="common_selector price2" name="price1"  value="1000" id="">--}}
+{{--                                    <label for="">$500 - $1000</label>--}}
+{{--                                </div>--}}
+{{--                                <div class="form-group">--}}
+{{--                                    <input type="checkbox" class="common_selector price3" name="price2"  value="1500" id="">--}}
+{{--                                    <label for="">$1001 - $1500</label>--}}
+{{--                                </div>--}}
+{{--                                <div class="form-group">--}}
+{{--                                    <input type="checkbox" class="common_selector price4" name="price3"  value="2000" id="">--}}
+{{--                                    <label for="">$1500 - $2000</label>--}}
+{{--                                </div>--}}
+{{--                                <div class="form-group">--}}
+{{--                                    <input type="checkbox" class="common_selector price5" name="price4"  value="2500" id="">--}}
+{{--                                    <label for="">$2000 - $2500</label>--}}
+{{--                                </div>--}}
+
+
+{{--                            </div>--}}
 
                             <!--=======  End of single sidebar widget  =======-->
 
@@ -207,50 +233,60 @@
                                 <div class="widget-product-wrapper">
                                     <!--=======  single widget product  =======-->
                                     @foreach($resent_produt as $reproduct)
-                                    <div class="single-widget-product-wrapper">
-                                        <div class="single-widget-product">
-                                            <!--=======  image  =======-->
+                                        <div class="single-widget-product-wrapper">
+                                            <div class="single-widget-product">
+                                                <!--=======  image  =======-->
 
-                                            <div class="single-widget-product__image">
-                                                <a href="{{route('product.view',$reproduct->id)}}">
-                                                    <img src="{{asset($reproduct->product_image)}}" class="img-fluid" alt="">
-                                                </a>
-                                            </div>
-
-                                            <!--=======  End of image  =======-->
-
-                                            <!--=======  content  =======-->
-
-                                            <div class="single-widget-product__content">
-
-                                                <div class="single-widget-product__content__top">
-                                                    <h3 class="product-title"><a href="{{route('product.view',$reproduct->id)}}">{{$reproduct->product_name}}</a></h3>
-                                                    <?php
-                                                    $min_amount = \App\product_schedule::distinct()->select('regular_price')->where('schedule_name',$reproduct->schedule_name)->min('regular_price');
-                                                    $max_amount = \App\product_schedule::distinct()->select('regular_price')->where('schedule_name',$reproduct->schedule_name)->max('regular_price');
-                                                    ?>
-                                                    <div class="price">
-
-                                                        <span class="discounted-price">${{$min_amount}}</span> -
-                                                        <span class="discounted-price">${{$max_amount}}</span>
-                                                    </div>
-                                                    <div class="rating">
-                                                        <i class="ion-android-star"></i>
-                                                        <i class="ion-android-star"></i>
-                                                        <i class="ion-android-star-outline"></i>
-                                                        <i class="ion-android-star-outline"></i>
-                                                        <i class="ion-android-star-outline"></i>
-                                                    </div>
+                                                <div class="single-widget-product__image">
+                                                    <a href="{{route('product.view',$reproduct->id)}}">
+                                                        <img src="{{asset($reproduct->product_image)}}" class="img-fluid" alt="">
+                                                    </a>
                                                 </div>
 
+                                                <!--=======  End of image  =======-->
+
+                                                <!--=======  content  =======-->
+
+                                                <div class="single-widget-product__content">
+
+                                                    <div class="single-widget-product__content__top">
+                                                        <h3 class="product-title"><a href="{{route('product.view',$reproduct->id)}}">{{$reproduct->product_name}}</a></h3>
+                                                        <?php
+                                                        $min_array = array();
+
+                                                        $min_amount = \App\product_schedule::distinct()->select('regular_price')->where('schedule_name',$reproduct->schedule_name)->get();
+                                                        $min_amounta = \Illuminate\Support\Facades\DB::table('product_schedules')->select('regular_price')->where('schedule_name',$reproduct->schedule_name)->get();
+
+                                                        for ($i=0;$i<count($min_amount);$i++){
+//                                                            $am = \App\product_schedule::where('regular_price',$min_amount[$i]['regular_price'])->first();
+                                                            array_push($min_array,$min_amount[$i]['regular_price']);
+                                                        }
+
+
+
+                                                        ?>
+                                                        <div class="price">
+
+                                                            <span class="discounted-price">${{min($min_array)}}</span> -
+                                                            <span class="discounted-price">${{max($min_array)}}</span>
+                                                        </div>
+                                                        <div class="rating">
+                                                            <i class="ion-android-star"></i>
+                                                            <i class="ion-android-star"></i>
+                                                            <i class="ion-android-star-outline"></i>
+                                                            <i class="ion-android-star-outline"></i>
+                                                            <i class="ion-android-star-outline"></i>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+
+                                                <!--=======  End of content  =======-->
                                             </div>
-
-                                            <!--=======  End of content  =======-->
                                         </div>
-                                    </div>
-                                    @endforeach
+                                @endforeach
 
-                                    <!--=======  End of single widget product  =======-->
+                                <!--=======  End of single widget product  =======-->
 
 
                                 </div>
@@ -262,22 +298,22 @@
 
                             <!--=======  single sidebar widget  =======-->
 
-                            <div class="single-sidebar-widget">
-                                <h2 class="single-sidebar-widget--title">Tags</h2>
+{{--                            <div class="single-sidebar-widget">--}}
+{{--                                <h2 class="single-sidebar-widget--title">Tags</h2>--}}
 
-                                <div class="tag-container">
-                                    <a href="#">bags</a>
-                                    <a href="#">chair</a>
-                                    <a href="#">clock</a>
-                                    <a href="#">comestic</a>
-                                    <a href="#">fashion</a>
-                                    <a href="#">furniture</a>
-                                    <a href="#">holder</a>
-                                    <a href="#">mask</a>
-                                    <a href="#">men</a>
-                                    <a href="#">oil</a>
-                                </div>
-                            </div>
+{{--                                <div class="tag-container">--}}
+{{--                                    <a href="#">bags</a>--}}
+{{--                                    <a href="#">chair</a>--}}
+{{--                                    <a href="#">clock</a>--}}
+{{--                                    <a href="#">comestic</a>--}}
+{{--                                    <a href="#">fashion</a>--}}
+{{--                                    <a href="#">furniture</a>--}}
+{{--                                    <a href="#">holder</a>--}}
+{{--                                    <a href="#">mask</a>--}}
+{{--                                    <a href="#">men</a>--}}
+{{--                                    <a href="#">oil</a>--}}
+{{--                                </div>--}}
+{{--                            </div>--}}
 
                             <!--=======  End of single sidebar widget  =======-->
                         </div>
@@ -293,20 +329,20 @@
                             <!--=======  single product  =======-->
 
 
-                                @include('frontend.include.productSingle')
+                        @include('frontend.include.productSingle')
 
 
 
-                            <!--=======  End of single product  =======-->
+                        <!--=======  End of single product  =======-->
 
 
                         </div>
 
-{{--                        <div class="row">--}}
-{{--                            <div class="col-lg-12 text-center mt-30">--}}
-{{--                                <a class="lezada-button lezada-button--medium lezada-button--icon--left" href="#"><i class="ion-android-add"></i> MORE</a>--}}
-{{--                            </div>--}}
-{{--                        </div>--}}
+                        {{--                        <div class="row">--}}
+                        {{--                            <div class="col-lg-12 text-center mt-30">--}}
+                        {{--                                <a class="lezada-button lezada-button--medium lezada-button--icon--left" href="#"><i class="ion-android-add"></i> MORE</a>--}}
+                        {{--                            </div>--}}
+                        {{--                        </div>--}}
 
                     </div>
                 </div>
@@ -350,7 +386,7 @@
             {
                 event.preventDefault();
 
-                $("html, body").animate({ scrollTop: 0 }, "slow");
+                $("html, body").animate({ scrollTop: 500 }, "slow");
 
                 $('li').removeClass('active');
                 $(this).parent('li').addClass('active');
@@ -393,7 +429,7 @@
                             $('.product').show();
                             $('.product').empty().append(data.view);
 
-                            }, 2000);
+                        }, 2000);
                     }
                 });
             });
@@ -427,7 +463,7 @@
                         'catagory' : catagory,
                     },
                     success:function(data){
-                        // console.log(data)
+                        console.log(data)
                         $('.loadimage').show();
                         $('.product').hide();
                         setTimeout(function(){

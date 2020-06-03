@@ -10,7 +10,7 @@ class product extends Model
 
     public function product_shcedule()
     {
-        return $this->hasMany(product_schedule::class);
+        return $this->hasMany(product_schedule::class,'schedule_name','schedule_name');
     }
 
 }
