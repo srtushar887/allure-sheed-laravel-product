@@ -15,6 +15,8 @@ use App\Imports\ProductScheduleImport;
 use App\order;
 use App\product;
 use App\product_color_image;
+use App\product_discount;
+use App\product_discount_shcedule;
 use App\product_schedule;
 use Illuminate\Http\Request;
 use Intervention\Image\Facades\Image;
@@ -384,6 +386,85 @@ class AdminProductsController extends Controller
 
         return response($sche);
     }
+
+    public function discount_price()
+    {
+        $category = category::all();
+        return view('admin.products.discountPrice',compact('category'));
+    }
+
+    public function discount_price_save(Request $request)
+    {
+        $new_dis = new product_discount();
+        $new_dis->category =  $request->category;
+        $new_dis->discount_price = $request->discount_price;
+        $new_dis->save();
+
+//        $sche = $request->schedule_name;
+//
+//
+//        for ($i=0;$i<count($sche);$i++){
+//            $new_dis_schedule = new product_discount_shcedule();
+//            $new_dis_schedule->discount_tbl_id = $new_dis->id;
+//            $new_dis_schedule->schedule_name = $sche[$i];
+//            $new_dis_schedule->save();
+//        }
+
+
+        return back()->with('success','Product Discount Created');
+
+
+
+
+    }
+
+
+    public function discount_price_list()
+    {
+        $category = product_discount::all();
+        return view('admin.products.discountPriceList',compact('category'));
+    }
+
+    public function discount_price_list_get()
+    {
+        $category =product_discount::all();
+        return DataTables::of($category)
+            ->addColumn('action', function ($category) {
+                return '  <a href="'.route('edit.cat-dis',$category->id).'"><button class="btn btn-success btn-info btn-sm" ><i class="fas fa-eye"></i> </button></a>
+                        <button id="'.$category->id.'" onclick="deletedis(this.id)" class="btn btn-danger btn-info btn-sm" data-toggle="modal" data-target="#disdelete"><i class="far fa-trash-alt"></i> </button>';
+            })
+            ->make(true);
+    }
+
+    public function discount_price_list_edit($id)
+    {
+        $category = category::all();
+        $dis = product_discount::where('id',$id)->first();
+        return view('admin.products.discountPriceEdit',compact('category','dis'));
+    }
+
+    public function discount_price_list_update(Request $request)
+    {
+        $dis_up = product_discount::where('id',$request->discount_price_edit_id)->first();
+        $dis_up->category =  $request->category;
+        $dis_up->discount_price = $request->discount_price;
+        $dis_up->save();
+        return back()->with('success','Product Discount Updated');
+    }
+
+    public function discount_price_list_delete(Request $request)
+    {
+        $dis_delete = product_discount::where('id',$request->dis_delete_id)->first();
+        $dis_delete->delete();
+        return back()->with('success','Product Discount Deleted');
+
+
+    }
+
+
+
+
+
 
 
 }

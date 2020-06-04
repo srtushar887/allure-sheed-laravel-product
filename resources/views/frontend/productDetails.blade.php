@@ -176,7 +176,6 @@
                                         <?php
                                         $width = \App\product_schedule::distinct()->select('width')->where('schedule_name',$product_details->schedule_name)->get();
                                         $length = \App\product_schedule::distinct()->select('length')->where('schedule_name',$product_details->schedule_name)->get();
-
                                         ?>
                                         <div class="shop-product__brands mb-20">
                                             <div class="shop-product__block__title">Width: </div>
@@ -186,15 +185,15 @@
                                                 @endforeach
                                             </select>
 
-                                            <select class="form-control twid_fra" name="witdhtside" style="margin-top: 0px;margin-left: 5px;">
-                                                <option value="0" selected="" price="0">0</option>
-                                                <option value="1/8" price="0">1/8</option>
-                                                <option value="1/4" price="0">1/4</option>
-                                                <option value="3/8" price="0">3/8</option>
-                                                <option value="1/2" price="0">1/2</option>
-                                                <option value="5/8" price="0">5/8</option>
-                                                <option value="5/8" price="0">5/8</option>
-                                                <option value="7/8" price="0">7/8</option>
+                                            <select class="form-control twid_fra widtfrac" name="witdhtside" style="margin-top: 0px;margin-left: 5px;">
+                                                <option value="0" selected="" >0</option>
+                                                <option value="1/8" >1/8</option>
+                                                <option value="1/4" >1/4</option>
+                                                <option value="3/8" >3/8</option>
+                                                <option value="1/2" >1/2</option>
+                                                <option value="5/8" >5/8</option>
+                                                <option value="5/8" >5/8</option>
+                                                <option value="7/8" >7/8</option>
                                             </select>
 
 
@@ -212,15 +211,15 @@
 
 
 
-                                            <select class="form-control twid_fra" name="legthside" style="margin-top: 0px;margin-left: 5px;">
-                                                <option value="102336" selected="" price="0">0</option>
-                                                <option value="1/8" price="0">1/8</option>
-                                                <option value="1/4" price="0">1/4</option>
-                                                <option value="3/8" price="0">3/8</option>
-                                                <option value="1/2" price="0">1/2</option>
-                                                <option value="5/8" price="0">5/8</option>
-                                                <option value="5/8" price="0">5/8</option>
-                                                <option value="7/8" price="0">7/8</option>
+                                            <select class="form-control twid_fra lengthfrac" name="legthside" style="margin-top: 0px;margin-left: 5px;">
+                                                <option value="0" selected="" >0</option>
+                                                <option value="1/8" >1/8</option>
+                                                <option value="1/4" >1/4</option>
+                                                <option value="3/8" >3/8</option>
+                                                <option value="1/2">1/2</option>
+                                                <option value="5/8" >5/8</option>
+                                                <option value="5/8" >5/8</option>
+                                                <option value="7/8" >7/8</option>
                                             </select>
 
 
@@ -300,6 +299,20 @@
                                             <input type="hidden" class="totalPrice" value="0.00" >
                                             <input type="hidden" class="proPrice" value="{{min($min_array)}}" >
                                             <input type="hidden" class="proid" name="pro_id" value="{{$product_details->id}}" >
+                                            <input type="text" class="latestprice" name="latest_price" value="{{min($min_array)}}" >
+
+
+                                            <?php
+                                                $cat_dis = \App\product_discount::where('category',$product_details->category)->first();
+                                            ?>
+
+                                            @if ($cat_dis)
+                                                <input type="hidden" class="catdiscount" name="pro_id" value="{{$cat_dis->discount_price}}" >
+                                            @else
+                                                <input type="hidden" class="catdiscount" name="pro_id" value="">
+                                            @endif
+
+
                                         </div>
 
                                         <!--=======  End of shop product quantity block  =======-->
@@ -633,29 +646,51 @@
 
 
                     var catnam = $('.catname').val();
+                    var oldprr1 = $('.newPricepro').val();
+                    var catdis1 = $('.catdiscount').val();
 
-                    console.log(catnam);
 
-                    var widt = $('.width').val();
-                    if(catnam == 'Vision Blinds'){
+                    if (catdis1 == ""){
+                        var prrr = `<span class="discounted-price">$${oldprr1}</span>`;
+                        $('.pricecng').empty().html(prrr);
 
-                        $('.loveria').hide();
-                        $('.deocr').hide();
-                        $('.valnce').hide();
-                        $('.visionf1').hide();
-                        $('.option_price').hide();
-                        $('.addacc').hide();
+                        var totl = `<span class="discounted-price">Total: $${oldprr1}</span>`;
+                        $('.total').empty().html(totl);
+
+                        $('.latestprice').val(oldprr1)
+
+                    }else {
+                        var disprice = (oldprr1 * catdis1 ) / 100
+
+                        var finalproice = oldprr1 - disprice;
+
+                        var prrr = `<span class="discounted-price">$${finalproice}</span>`;
+                        $('.pricecng').empty().html(prrr);
+
+                        var totl = `<span class="discounted-price">Total: $${finalproice}</span>`;
+                        $('.total').empty().html(totl);
+
+                        $('.latestprice').val(finalproice)
 
                     }
 
-                    $('.width').change(function (e) {
-                        e.preventDefault();
-                        var width = $('.width').val();
-                        var length = $('.length').val();
+
+                    //********* withd fraction
+                    $('.widtfrac').change(function () {
+                        var wd_val = $('.width').val();
+                        var len_fr = $('.lengthfrac').val();
+                        var len_val = $('.length').val();
+
+                        if (len_fr == 0){
+                           var length = parseInt(len_val) + parseInt(1);
+                        }else {
+                            var length = $('.length').val();
+                        }
+                        console.log(length)
                         var schedule = $('.schedulename').val();
                         var catname = $('.catname').val();
-
-                        var wd = $(this).val();
+                        var width  = parseInt(wd_val) + parseInt(1);
+                        var wd = parseInt(wd_val) + parseInt(1);
                         // vishion blind
                         if(catname == 'Vision Blinds'){
 
@@ -805,22 +840,46 @@
                                     'catname' : catname,
                                 },
                                 success:function(data){
-
+                                    var nprice = (data.regular_price)
                                     var oldprr = $('.newPricepro').val();
 
+                                    var catdis = $('.catdiscount').val();
+
+
                                     var f4pr = $('.f4').val();
-                                    console.log(f4pr)
 
-                                    var total =  parseInt(oldprr) + parseInt(f4pr);
-                                    console.log(total)
-                                    var prrr = `<span class="discounted-price">$${total}</span>`;
-                                    $('.pricecng').empty().html(prrr);
 
-                                    var totl = `<span class="discounted-price">Total: $${total}</span>`;
-                                    $('.total').empty().html(totl);
+                                    var total =  parseInt(nprice) + parseInt(f4pr);
+                                    if (catdis == ""){
+                                        console.log('nai')
+                                        var prrr = `<span class="discounted-price">$${total}</span>`;
+                                        $('.pricecng').empty().html(prrr);
+
+                                        var totl = `<span class="discounted-price">Total: $${total}</span>`;
+                                        $('.total').empty().html(totl);
+
+                                        $('.latestprice').empty().val(total);
+
+                                    }else {
+                                        var disprice = (total * catdis ) / 100
+
+                                        var finalproice = total - disprice;
+
+                                        var prrr = `<span class="discounted-price">$${finalproice}</span>`;
+                                        $('.pricecng').empty().html(prrr);
+
+                                        var totl = `<span class="discounted-price">Total: $${finalproice}</span>`;
+                                        $('.total').empty().html(totl);
+
+                                        $('.latestprice').empty().val(finalproice);
+
+                                    }
 
                                     var propice = `<span class="product_price">Product Price: $${oldprr}</span>`;
                                     $('.product_price').empty().html(propice);
+
+
+
 
 
 
@@ -1026,12 +1085,508 @@
                                 },
                                 success:function(data){
 
-                                    var schedule_name = data.schedule_name
+                                    var schedule_name = data.schedule_name;
 
-                                    var prrr = `<span class="discounted-price">$${data.regular_price}</span>`;
-                                    $('.pricecng').empty().html(prrr);
-                                    $('.newPricepro').val(data.regular_price);
 
+
+                                    var catdis = $('.catdiscount').val();
+                                    console.log(catdis)
+
+
+                                    if (catdis == ""){
+                                        var prrr = `<span class="discounted-price">$${data.regular_price}</span>`;
+                                        $('.pricecng').empty().html(prrr);
+                                        $('.newPricepro').val(data.regular_price);
+                                        $('.latestprice').empty().val(data.regular_price);
+
+                                    }else {
+
+                                        var disprice = (data.regular_price * catdis) / 100;
+                                        var finalprice = data.regular_price - disprice;
+                                        console.log(finalprice)
+                                        var prrr = `<span class="discounted-price">$${finalprice}</span>`;
+                                        $('.pricecng').empty().html(prrr);
+                                        $('.newPricepro').val(data.regular_price);
+
+                                        $('.latestprice').empty().val(finalprice);
+
+                                    }
+                                    $(".f1").prop("checked", false);
+                                    $(".f3").prop("checked", false);
+                                    $(".f2").prop("checked", false);
+
+                                    if (schedule_name == "J"){
+                                        if (width > 72 || length > 70 ){
+                                            $('.deocr').hide();
+                                        }else if(width < 72 || length < 72){
+                                            $('.deocr').show();
+                                        }
+                                    }else{
+                                        if (width > 72 || length > 72 ){
+                                            $('.deocr').hide();
+                                        }else if(width < 72 || length < 72){
+                                            $('.deocr').show();
+                                        }
+                                    }
+                                    $('.pricecng').show();
+
+                                    var oldtotalrice = $('.newPricepro').val();
+                                    $('.total').empty().append(`Total: $${oldtotalrice}`);
+                                    $('.product_price').empty().append(`Product Price: ${data.regular_price}`);
+
+                                }
+                            });
+                        }
+
+
+                    });
+
+                    //********* end withd fraction
+
+                    var widt = $('.width').val();
+                    if(catnam == 'Vision Blinds'){
+
+                        $('.loveria').hide();
+                        $('.deocr').hide();
+                        $('.valnce').hide();
+                        $('.visionf1').hide();
+                        $('.option_price').hide();
+                        $('.addacc').hide();
+
+                    }else {
+                        $('.visionf1').hide();
+                    }
+                    //********* withd
+                    $('.width').change(function (e) {
+                        e.preventDefault();
+                        var width = $('.width').val();
+                        var length = $('.length').val();
+                        var schedule = $('.schedulename').val();
+                        var catname = $('.catname').val();
+
+
+
+                        var wd = $(this).val();
+                        // vishion blind
+                        if(catname == 'Vision Blinds'){
+
+                            if (wd == 24 && length > 72 ){
+                                $('.visionf1').show();
+                                $('.loveria').hide();
+                                $('.deocr').hide();
+                                $('.valnce').hide();
+                                $('.f4').empty().val(16);
+                                var fnvalama = 'Square or Louvolite fascia($16.00)';
+                                $('.f1amvalvishon').empty().html(fnvalama);
+                                $('.addacc').show();
+                                $('.option_price').show();
+                                $('.option_price').empty().append(`Options Price: $16`);
+                            }else if (wd >= 25 && wd <= 30 && length > 72){
+                                $('.visionf1').show();
+                                $('.loveria').hide();
+                                $('.deocr').hide();
+                                $('.valnce').hide();
+                                $('.f4').empty().val(20);
+                                var fnvalama = 'Square or Louvolite fascia($20.00)';
+                                $('.f1amvalvishon').empty().html(fnvalama);
+                                $('.addacc').show();
+                                $('.option_price').show();
+                                $('.option_price').empty().append(`Options Price: $16`);
+                            }else if (wd >= 31 && wd <= 36 && length > 72 ){
+                                $('.visionf1').show();
+                                $('.loveria').hide();
+                                $('.deocr').hide();
+                                $('.valnce').hide();
+                                $('.f4').empty().val(24);
+                                var fnvalama = 'Square or Louvolite fascia($24.00)';
+                                $('.f1amvalvishon').empty().html(fnvalama);
+                                $('.addacc').show();
+                                $('.option_price').show();
+                                $('.option_price').empty().append(`Options Price: $16`);
+                            }else if (wd >= 37 && wd <= 42 && length > 72){
+                                $('.visionf1').show();
+                                $('.loveria').hide();
+                                $('.deocr').hide();
+                                $('.valnce').hide();
+                                $('.f4').empty().val(28);
+                                var fnvalama = 'Square or Louvolite fascia($28.00)';
+                                $('.f1amvalvishon').empty().html(fnvalama);
+                                $('.addacc').show();
+                                $('.option_price').show();
+                                $('.option_price').empty().append(`Options Price: $28`);
+                            }else if (wd >= 43 && wd <= 48 && length > 72){
+                                $('.visionf1').show();
+                                $('.loveria').hide();
+                                $('.deocr').hide();
+                                $('.valnce').hide();
+                                $('.f4').empty().val(32);
+                                var fnvalama = 'Square or Louvolite fascia($32.00)';
+                                $('.f1amvalvishon').empty().html(fnvalama);
+                                $('.addacc').show();
+                                $('.option_price').show();
+                                $('.option_price').empty().append(`Options Price: $32`);
+                            }else if (wd >= 49 && wd <= 54 && length > 72){
+                                $('.visionf1').show();
+                                $('.loveria').hide();
+                                $('.deocr').hide();
+                                $('.valnce').hide();
+                                $('.f4').empty().val(36);
+                                var fnvalama = 'Square or Louvolite fascia($36.00)';
+                                $('.f1amvalvishon').empty().html(fnvalama);
+                                $('.addacc').show();
+                                $('.option_price').show();
+                                $('.option_price').empty().append(`Options Price: $36`);
+                            }else if (wd >= 55 && wd <= 60 && length > 72){
+                                $('.visionf1').show();
+                                $('.loveria').hide();
+                                $('.deocr').hide();
+                                $('.valnce').hide();
+                                $('.f4').empty().val(40);
+                                var fnvalama = 'Square or Louvolite fascia($40.00)';
+                                $('.f1amvalvishon').empty().html(fnvalama);
+                                $('.addacc').show();
+                                $('.option_price').show();
+                                $('.option_price').empty().append(`Options Price: $40`);
+                            }else if (wd >= 61 && wd <= 66 && length > 72){
+                                $('.visionf1').show();
+                                $('.loveria').hide();
+                                $('.deocr').hide();
+                                $('.valnce').hide();
+                                $('.f4').empty().val(44);
+                                var fnvalama = 'Square or Louvolite fascia($44.00)';
+                                $('.f1amvalvishon').empty().html(fnvalama);
+                                $('.addacc').show();
+                                $('.option_price').show();
+                                $('.option_price').empty().append(`Options Price: $44`);
+                            }else if (wd >= 67 && wd <= 72 && length > 72){
+                                $('.visionf1').show();
+                                $('.loveria').hide();
+                                $('.deocr').hide();
+                                $('.valnce').hide();
+                                $('.f4').empty().val(48);
+                                var fnvalama = 'Square or Louvolite fascia($48.00)';
+                                $('.f1amvalvishon').empty().html(fnvalama);
+                                $('.addacc').show();
+                                $('.option_price').show();
+                                $('.option_price').empty().append(`Options Price: $48`);
+                            }else if (wd >= 73 && wd <= 84 && length > 72){
+                                $('.visionf1').show();
+                                $('.loveria').hide();
+                                $('.deocr').hide();
+                                $('.valnce').hide();
+                                $('.f4').empty().val(56);
+                                var fnvalama = 'Square or Louvolite fascia($56.00)';
+                                $('.f1amvalvishon').empty().html(fnvalama);
+                                $('.addacc').show();
+                                $('.option_price').show();
+                                $('.option_price').empty().append(`Options Price: $56`);
+                            }else if (wd >= 85 && wd <= 96 && length > 72){
+                                $('.visionf1').show();
+                                $('.loveria').hide();
+                                $('.deocr').hide();
+                                $('.valnce').hide();
+                                $('.f4').empty().val(64);
+                                var fnvalama = 'Square or Louvolite fascia($64.00)';
+                                $('.f1amvalvishon').empty().html(fnvalama);
+                                $('.addacc').show();
+                                $('.option_price').show();
+                                $('.option_price').empty().append(`Options Price: $64`);
+                            }
+
+                            else {
+                                $('.loveria').hide();
+                                $('.deocr').hide();
+                                $('.valnce').hide();
+                                $('.visionf1').hide();
+                                $('.f1').val(0);
+                                $('.f4').val(0);
+                                $('.addacc').hide();
+                                $('.option_price').hide();
+                            }
+
+
+                            $.ajax({
+                                type : "POST",
+                                url: "{{route('get_product_price')}}",
+                                data : {
+                                    '_token' : "{{csrf_token()}}",
+                                    'width' : width,
+                                    'length' : length,
+                                    'schedule' : schedule,
+                                    'catname' : catname,
+                                },
+                                success:function(data){
+                                    var nprice = (data.regular_price)
+                                    var oldprr = $('.newPricepro').val();
+
+                                    var catdis = $('.catdiscount').val();
+
+
+                                    var f4pr = $('.f4').val();
+
+
+                                    var total =  parseInt(nprice) + parseInt(f4pr);
+                                    if (catdis == ""){
+                                        console.log('nai')
+                                        var prrr = `<span class="discounted-price">$${total}</span>`;
+                                        $('.pricecng').empty().html(prrr);
+
+                                        var totl = `<span class="discounted-price">Total: $${total}</span>`;
+                                        $('.total').empty().html(totl);
+
+                                        $('.latestprice').empty().val(total);
+
+                                    }else {
+                                        var disprice = (total * catdis ) / 100
+
+                                        var finalproice = total - disprice;
+
+                                        var prrr = `<span class="discounted-price">$${finalproice}</span>`;
+                                        $('.pricecng').empty().html(prrr);
+
+                                        var totl = `<span class="discounted-price">Total: $${finalproice}</span>`;
+                                        $('.total').empty().html(totl);
+
+                                        $('.latestprice').empty().val(finalproice);
+
+                                    }
+
+                                        var propice = `<span class="product_price">Product Price: $${oldprr}</span>`;
+                                        $('.product_price').empty().html(propice);
+
+
+
+
+
+
+
+                                }
+                            });
+
+
+                        }
+                        //other category
+                        else {
+
+                            if (wd == 24)
+                            {
+                                $('.f1').val(80);
+                                var fnvalama = 'Square or Louvolite fascia($80.00)';
+                                $('.f1amval').empty().html(fnvalama);
+
+                                $('.f3').val(56);
+                                var fnvalama3 = 'Decor Cassette($56.00)';
+                                $('.f3amval').empty().html(fnvalama3);
+
+                                $('.f2').val(48);
+                                var fnvalama2 = 'Valance($48.00)';
+                                $('.f2amval').empty().html(fnvalama2);
+
+                            }else if(wd >= 25 && wd <= 32){
+                                $('.f1').val(120);
+                                var fnvalama = 'Square or Louvolite fascia($120.00)';
+                                $('.f1amval').empty().html(fnvalama);
+
+                                $('.f3').val(84);
+                                var fnvalama3 = 'Decor Cassette($84.00)';
+                                $('.f3amval').empty().html(fnvalama3);
+
+
+                                $('.f2').val(48);
+                                var fnvalama2 = 'Valance($48.00)';
+                                $('.f2amval').empty().html(fnvalama2);
+
+
+                            }else if(wd >= 33 && wd <= 40  ){
+                                $('.f1').val(140);
+                                var fnvalama = 'Square or Louvolite fascia($140.00)';
+                                $('.f1amval').empty().html(fnvalama);
+
+                                $('.f3').val(98);
+                                var fnvalama3 = 'Decor Cassette($98.00)';
+                                $('.f3amval').empty().html(fnvalama3);
+
+
+                                $('.f2').val(48);
+                                var fnvalama2 = 'Valance($48.00)';
+                                $('.f2amval').empty().html(fnvalama2);
+
+
+                            }else if(wd >= 41 && wd <= 48 ){
+
+
+                                $('.f1').val(160);
+                                var fnvalama = 'Square or Louvolite fascia($160.00)';
+                                $('.f1amval').empty().html(fnvalama);
+
+                                $('.f3').val(112);
+                                var fnvalama3 = 'Decor Cassette($112.00)';
+                                $('.f3amval').empty().html(fnvalama3);
+
+
+                                $('.f2').val(64);
+                                var fnvalama2 = 'Valance($64.00)';
+                                $('.f2amval').empty().html(fnvalama2);
+
+
+                            }
+                            else if(wd >= 49 && wd <= 56){
+
+                                $('.f1').val(200);
+                                var fnvalama = 'Square or Louvolite fascia($200.00)';
+                                $('.f1amval').empty().html(fnvalama);
+
+
+                                $('.f3').val(140);
+                                var fnvalama3 = 'Decor Cassette($140.00)';
+                                $('.f3amval').empty().html(fnvalama3);
+
+                                $('.f2').val(75);
+                                var fnvalama2 = 'Valance($75.00)';
+                                $('.f2amval').empty().html(fnvalama2);
+
+
+                            }
+                            else if(wd >= 57 && wd <= 64){
+                                $('.f1').val(220);
+                                var fnvalama = 'Square or Louvolite fascia($220.00)';
+                                $('.f1amval').empty().html(fnvalama);
+
+                                $('.f3').val(154);
+                                var fnvalama3 = 'Decor Cassette($154.00)';
+                                $('.f3amval').empty().html(fnvalama3);
+
+                                $('.f2').val(86);
+                                var fnvalama2 = 'Valance($86.00)';
+                                $('.f2amval').empty().html(fnvalama2);
+
+
+                            } else if(wd >= 65 && wd <= 72){
+                                $('.f1').val(240);
+                                var fnvalama = 'Square or Louvolite fascia($240.00)';
+                                $('.f1amval').empty().html(fnvalama);
+
+                                $('.f3').val(168);
+                                var fnvalama3 = 'Decor Cassette($168.00)';
+                                $('.f3amval').empty().html(fnvalama3);
+
+                                $('.f2').val(96);
+                                var fnvalama2 = 'Valance($96.00)';
+                                $('.f2amval').empty().html(fnvalama2);
+
+
+                            }else if(wd >= 73 && wd <= 80){
+                                $('.f1').val(280);
+                                var fnvalama = 'Square or Louvolite fascia($280.00)';
+                                $('.f1amval').empty().html(fnvalama);
+
+                                $('.f3').val(0);
+                                var fnvalama3 = 'Decor Cassette($0.00)';
+                                $('.f3amval').empty().html(fnvalama3);
+
+                                $('.f2').val(107);
+                                var fnvalama2 = 'Valance($107.00)';
+                                $('.f2amval').empty().html(fnvalama2);
+                            }else if(wd >= 81 && wd <= 88){
+                                $('.f1').val(300);
+                                var fnvalama = 'Square or Louvolite fascia($300.00)';
+                                $('.f1amval').empty().html(fnvalama);
+
+                                $('.f3').val(0);
+                                var fnvalama3 = 'Decor Cassette($0.00)';
+                                $('.f3amval').empty().html(fnvalama3);
+
+                                $('.f2').val(117);
+                                var fnvalama2 = 'Valance($117.00)';
+                                $('.f2amval').empty().html(fnvalama2);
+                            }else if(wd >= 89 && wd <= 96){
+                                $('.f1').val(320);
+                                var fnvalama = 'Square or Louvolite fascia($320.00)';
+                                $('.f1amval').empty().html(fnvalama);
+
+                                $('.f3').val(0);
+                                var fnvalama3 = 'Decor Cassette($0.00)';
+                                $('.f3amval').empty().html(fnvalama3);
+
+                                $('.f2').val(128);
+                                var fnvalama2 = 'Valance($128.00)';
+                                $('.f2amval').empty().html(fnvalama2);
+                            }else if(wd >= 97 && wd <= 104){
+                                $('.f1').val(360);
+                                var fnvalama = 'Square or Louvolite fascia($360.00)';
+                                $('.f1amval').empty().html(fnvalama);
+
+                                $('.f3').val(0);
+                                var fnvalama3 = 'Decor Cassette($0.00)';
+                                $('.f3amval').empty().html(fnvalama3);
+
+                                $('.f2').val(138);
+                                var fnvalama2 = 'Valance($138.00)';
+                                $('.f2amval').empty().html(fnvalama2);
+                            }else if(wd >= 105 && wd <= 112){
+                                $('.f1').val(380);
+                                var fnvalama = 'Square or Louvolite fascia($380.00)';
+                                $('.f1amval').empty().html(fnvalama);
+
+                                $('.f3').val(0);
+                                var fnvalama3 = 'Decor Cassette($0.00)';
+                                $('.f3amval').empty().html(fnvalama3);
+
+                                $('.f2').val(150);
+                                var fnvalama2 = 'Valance($150.00)';
+                                $('.f2amval').empty().html(fnvalama2);
+                            }else if(wd >= 113 && wd <= 120){
+                                $('.f1').val(400);
+                                var fnvalama = 'Square or Louvolite fascia($400.00)';
+                                $('.f1amval').empty().html(fnvalama);
+
+                                $('.f3').val(0);
+                                var fnvalama3 = 'Decor Cassette($0.00)';
+                                $('.f3amval').empty().html(fnvalama3);
+
+                                $('.f2').val(165);
+                                var fnvalama2 = 'Valance($165.00)';
+                                $('.f2amval').empty().html(fnvalama2);
+                            }
+
+                            $.ajax({
+                                type : "POST",
+                                url: "{{route('get_product_price')}}",
+                                data : {
+                                    '_token' : "{{csrf_token()}}",
+                                    'width' : width,
+                                    'length' : length,
+                                    'schedule' : schedule,
+                                    'catname' : catname,
+                                },
+                                success:function(data){
+
+                                    var schedule_name = data.schedule_name;
+
+
+
+                                    var catdis = $('.catdiscount').val();
+                                    console.log(catdis)
+
+
+                                    if (catdis == ""){
+                                        var prrr = `<span class="discounted-price">$${data.regular_price}</span>`;
+                                        $('.pricecng').empty().html(prrr);
+                                        $('.newPricepro').val(data.regular_price);
+                                        $('.latestprice').empty().val(data.regular_price);
+
+                                    }else {
+
+                                        var disprice = (data.regular_price * catdis) / 100;
+                                        var finalprice = data.regular_price - disprice;
+                                        console.log(finalprice)
+                                        var prrr = `<span class="discounted-price">$${finalprice}</span>`;
+                                        $('.pricecng').empty().html(prrr);
+                                        $('.newPricepro').val(data.regular_price);
+
+                                        $('.latestprice').empty().val(finalprice);
+
+                                    }
                                     $(".f1").prop("checked", false);
                                     $(".f3").prop("checked", false);
                                     $(".f2").prop("checked", false);
@@ -1062,6 +1617,277 @@
 
 
                     });
+
+                    //*********end  withd
+
+
+
+
+
+
+
+
+
+
+                    //*********length fraction
+                    $('.lengthfrac').change(function () {
+                        var lengt_val = $('.length').val();
+                        var len_fr = $(this).val();
+                        if (len_fr == 0){
+                            var length = $('.length').val();
+                        }else {
+                            var length = parseInt(lengt_val) + parseInt(1);
+                        }
+
+                        var wid_frac = $('.widtfrac').val();
+                        var wid_val = $('.width').val();
+                        if (wid_frac == 0){
+                            var width = $('.width').val();
+                            var wd = $('.width').val();
+                        }else {
+                            var width = parseInt(wid_val) + parseInt(1);
+                            var wd = parseInt(wid_val) + parseInt(1);
+                            console.log(width)
+                            console.log(wd)
+                        }
+                        var schedule = $('.schedulename').val();
+                        var catname = $('.catname').val();
+
+
+                        if(catname == 'Vision Blinds') {
+
+                            if (wd == 24 && length > 72 ){
+                                $('.visionf1').show();
+                                $('.loveria').hide();
+                                $('.deocr').hide();
+                                $('.valnce').hide();
+                                $('.f4').val(16);
+                                var fnvalama = 'Square or Louvolite fascia($16.00)';
+                                $('.f1amvalvishon').empty().html(fnvalama);
+
+                                $('.option_price').empty().append(`Options Price: $16`);
+                                $('.addacc').show();
+                                $('.option_price').show();
+                            }else if (wd >= 25 && wd <= 30 && length > 72){
+                                $('.visionf1').show();
+                                $('.loveria').hide();
+                                $('.deocr').hide();
+                                $('.valnce').hide();
+                                $('.f4').val(20);
+                                var fnvalama = 'Square or Louvolite fascia($20.00)';
+                                $('.f1amvalvishon').empty().html(fnvalama);
+                                $('.option_price').empty().append(`Options Price: $20`);
+                                $('.addacc').show();
+                                $('.option_price').show();
+                            }else if (wd >= 31 && wd <= 36 && length > 72 ){
+                                $('.visionf1').show();
+                                $('.loveria').hide();
+                                $('.deocr').hide();
+                                $('.valnce').hide();
+                                $('.f4').val(24);
+                                var fnvalama = 'Square or Louvolite fascia($24.00)';
+                                $('.f1amvalvishon').empty().html(fnvalama);
+                                $('.option_price').empty().append(`Options Price: $24`);
+                                $('.addacc').show();
+                                $('.option_price').show();
+                            }else if (wd >= 37 && wd <= 42 && length > 72){
+                                $('.visionf1').show();
+                                $('.loveria').hide();
+                                $('.deocr').hide();
+                                $('.valnce').hide();
+                                $('.f1').val(28);
+                                var fnvalama = 'Square or Louvolite fascia($28.00)';
+                                $('.f1amval').empty().html(fnvalama);
+                                $('.option_price').empty().append(`Options Price: $28`);
+                                $('.addacc').show();
+                                $('.option_price').show();
+                            }else if (wd >= 43 && wd <= 48 && length > 72){
+                                $('.visionf1').show();
+                                $('.loveria').hide();
+                                $('.deocr').hide();
+                                $('.valnce').hide();
+                                $('.f4').val(32);
+                                var fnvalama = 'Square or Louvolite fascia($32.00)';
+                                $('.f1amvalvishon').empty().html(fnvalama);
+                                $('.option_price').empty().append(`Options Price: $32`);
+                                $('.addacc').show();
+                                $('.option_price').show();
+                            }else if (wd >= 49 && wd <= 54 && length > 72){
+                                $('.visionf1').show();
+                                $('.loveria').hide();
+                                $('.deocr').hide();
+                                $('.valnce').hide();
+                                $('.f4').val(36);
+                                var fnvalama = 'Square or Louvolite fascia($36.00)';
+                                $('.f1amvalvishon').empty().html(fnvalama);
+                                $('.option_price').empty().append(`Options Price: $36`);
+                                $('.addacc').show();
+                                $('.option_price').show();
+                            }else if (wd >= 55 && wd <= 60 && length > 72){
+                                $('.loveria').show();
+                                $('.deocr').hide();
+                                $('.valnce').hide();
+                                $('.f4').val(40);
+                                var fnvalama = 'Square or Louvolite fascia($40.00)';
+                                $('.f1amvalvishon').empty().html(fnvalama);
+                                $('.option_price').empty().append(`Options Price: $40`);
+                                $('.addacc').show();
+                                $('.option_price').show();
+                            }else if (wd >= 61 && wd <= 66 && length > 72){
+                                $('.visionf1').show();
+                                $('.loveria').hide();
+                                $('.deocr').hide();
+                                $('.valnce').hide();
+                                $('.f4').val(44);
+                                var fnvalama = 'Square or Louvolite fascia($44.00)';
+                                $('.f1amvalvishon').empty().html(fnvalama);
+                                $('.option_price').empty().append(`Options Price: $44`);
+                                $('.addacc').show();
+                                $('.option_price').show();
+                            }else if (wd >= 67 && wd <= 72 && length > 72){
+                                $('.visionf1').show();
+                                $('.loveria').hide();
+                                $('.deocr').hide();
+                                $('.valnce').hide();
+                                $('.f4').val(48);
+                                var fnvalama = 'Square or Louvolite fascia($48.00)';
+                                $('.f1amvalvishon').empty().html(fnvalama);
+                                $('.option_price').empty().append(`Options Price: $48`);
+                                $('.addacc').show();
+                                $('.option_price').show();
+                            }else if (wd >= 73 && wd <= 84 && length > 72){
+                                $('.visionf1').show();
+                                $('.loveria').hide();
+                                $('.deocr').hide();
+                                $('.valnce').hide();
+                                $('.f4').val(56);
+                                var fnvalama = 'Square or Louvolite fascia($56.00)';
+                                $('.f1amvalvishon').empty().html(fnvalama);
+                                $('.option_price').empty().append(`Options Price: $56`);
+                                $('.addacc').show();
+                                $('.option_price').show();
+                            }else if (wd >= 85 && wd <= 96 && length > 72){
+                                $('.visionf1').show();
+                                $('.loveria').hide();
+                                $('.deocr').hide();
+                                $('.valnce').hide();
+                                $('.f4').val(64);
+                                var fnvalama = 'Square or Louvolite fascia($64.00)';
+                                $('.f1amvalvishon').empty().html(fnvalama);
+                                $('.option_price').empty().append(`Options Price: $64`);
+                                $('.addacc').show();
+                                $('.option_price').show();
+                            }
+
+                            else {
+                                $('.loveria').hide();
+                                $('.deocr').hide();
+                                $('.valnce').hide();
+                                $('.f1amvalvishon').hide();
+                                $('.visionf1').hide();
+                                $('.f1').val(0);
+                                $('.f4').val(0);
+                                $('.option_price').hide();
+                                $('.addacc').hide();
+                            }
+                        }
+
+                        $.ajax({
+                            type : "POST",
+                            url: "{{route('get_product_price')}}",
+                            data : {
+                                '_token' : "{{csrf_token()}}",
+                                'width' : width,
+                                'length' : length,
+                                'schedule' : schedule,
+                                'catname' : catname,
+                            },
+                            success:function(data){
+                                console.log(data)
+                                var schedule_name = data.schedule_name
+                                var n_price = data.regular_price
+
+                                var prrr = `<span class="discounted-price">$${data.regular_price}</span>`;
+                                $('.pricecng').empty().html(prrr);
+                                $('.newPricepro').val(data.regular_price);
+
+                                if(catname != 'Vision Blinds'){
+                                    if (schedule_name == "J"){
+                                        if (width > 72 || length > 70 ){
+                                            $('.deocr').hide();
+                                        }else if(width < 72 || length < 72){
+                                            $('.deocr').show();
+                                        }
+                                    }else{
+                                        if (width > 72 || length > 72 ){
+                                            $('.deocr').hide();
+                                        }else if(width < 72 || length < 72){
+                                            $('.deocr').show();
+                                        }
+                                    }
+                                }
+
+
+
+                                $('.pricecng').show();
+
+                                var catdis = $('.catdiscount').val();
+
+
+                                if(catname != 'Vision Blinds'){
+                                    var oldprr = $('.newPricepro').val();
+                                    var f1pr = $('.f1').val();
+                                }else{
+                                    var oldprr = $('.newPricepro').val();
+                                    var f1pr = $('.f4').val();
+                                }
+
+
+
+
+                                var total =  parseInt(n_price) + parseInt(f1pr);
+
+
+                                if (catdis == ""){
+                                    var prrr = `<span class="discounted-price">$${total}</span>`;
+                                    $('.pricecng').empty().html(prrr);
+
+                                    $('.latestprice').empty().val(total);
+
+                                }else {
+                                    var disprice = (total * catdis) / 100;
+                                    var finalprice = total - disprice;
+
+                                    var prrr = `<span class="discounted-price">$${finalprice}</span>`;
+                                    $('.pricecng').empty().html(prrr);
+
+                                    $('.latestprice').empty().val(finalprice);
+
+                                }
+
+
+
+                                var oldtotalrice = $('.newPricepro').val();
+                                $('.total').empty().append(`Total: $${total}`);
+                                $('.product_price').empty().append(`Product Price: ${data.regular_price}`);
+
+
+                            }
+                        });
+
+
+
+
+                    })
+
+
+
+                    //*********end length fraction
+
+
+
+
+
 
 
 
@@ -1223,6 +2049,7 @@
                             success:function(data){
                                 console.log(data)
                                 var schedule_name = data.schedule_name
+                                var n_price = data.regular_price
 
                                 var prrr = `<span class="discounted-price">$${data.regular_price}</span>`;
                                 $('.pricecng').empty().html(prrr);
@@ -1248,7 +2075,7 @@
 
                                 $('.pricecng').show();
 
-
+                                var catdis = $('.catdiscount').val();
 
 
                                 if(catname != 'Vision Blinds'){
@@ -1259,11 +2086,30 @@
                                     var f1pr = $('.f4').val();
                                 }
 
-                                console.log(f1pr);
-                                var total =  parseInt(oldprr) + parseInt(f1pr);
 
-                                var prrr = `<span class="discounted-price">$${total}</span>`;
-                                $('.pricecng').empty().html(prrr);
+
+
+                                var total =  parseInt(n_price) + parseInt(f1pr);
+
+
+                                if (catdis == ""){
+                                    var prrr = `<span class="discounted-price">$${total}</span>`;
+                                    $('.pricecng').empty().html(prrr);
+
+                                    $('.latestprice').empty().val(total);
+
+                                }else {
+                                    var disprice = (total * catdis) / 100;
+                                    var finalprice = total - disprice;
+
+                                    var prrr = `<span class="discounted-price">$${finalprice}</span>`;
+                                    $('.pricecng').empty().html(prrr);
+
+                                    $('.latestprice').empty().val(finalprice);
+
+                                }
+
+
 
                                 var oldtotalrice = $('.newPricepro').val();
                                 $('.total').empty().append(`Total: $${total}`);
@@ -1289,10 +2135,24 @@
                                 var oldprr = $('.newPricepro').val();
                                 var f1pr = $(this).val();
                                 var total =  parseInt(oldprr) + parseInt(f1pr);
-                                var prrr = `<span class="discounted-price">$${total}</span>`;
-                                $('.pricecng').empty().html(prrr);
 
-                                $('.newPricepro').val(total);
+                                var catdis = $('.catdiscount').val();
+
+
+                                if (catdis == ""){
+                                    var prrr = `<span class="discounted-price">$${total}</span>`;
+                                    $('.pricecng').empty().html(prrr);
+
+                                    $('.newPricepro').val(total);
+                                }else {
+                                    var disprice = (total * catdis) / 100;
+                                    var finalprice = total - disprice;
+                                    var prrr = `<span class="discounted-price">$${finalprice}</span>`;
+                                    $('.pricecng').empty().html(prrr);
+
+                                    $('.newPricepro').val(total);
+
+                                }
 
 
                                 var oldopprice = $('.optionPrice').val();
@@ -1317,6 +2177,8 @@
 
                                 var oldopprice = $('.optionPrice').val();
                                 var newopprice = parseInt(oldopprice) - parseInt(f1pr);
+
+
 
                                 $('.optionPrice').val(newopprice);
                                 $('.option_price').empty().append(`Options Price: $${newopprice}`);

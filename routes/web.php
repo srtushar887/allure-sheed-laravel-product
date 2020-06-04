@@ -114,6 +114,15 @@ Route::group(['middleware' => ['auth:admin']], function() {
         Route::get('/home-static-two', 'Admin\AdminFrontendController@home_static_two')->name('home.static.two');
         Route::post('/home-static-two-save', 'Admin\AdminFrontendController@home_static_two_save')->name('admin.home.static.two.save');
 
+        //discount price
+        Route::get('/discount-price', 'Admin\AdminProductsController@discount_price')->name('admin.discount.price');
+        Route::post('/discount-price-save', 'Admin\AdminProductsController@discount_price_save')->name('admin.product.discount.save');
+        Route::get('/discount-price-list', 'Admin\AdminProductsController@discount_price_list')->name('admin.discount.price.list');
+        Route::get('/discount-price-list-get', 'Admin\AdminProductsController@discount_price_list_get')->name('get.category.discount');
+        Route::get('/discount-price-edit/{id}', 'Admin\AdminProductsController@discount_price_list_edit')->name('edit.cat-dis');
+        Route::post('/discount-price-update', 'Admin\AdminProductsController@discount_price_list_update')->name('admin.product.discount.update');
+        Route::post('/discount-price-delete', 'Admin\AdminProductsController@discount_price_list_delete')->name('admin.product.discount.delete');
+
     });
 });
 

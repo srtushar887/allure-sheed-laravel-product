@@ -149,6 +149,17 @@
                     <li>
                         <a href="javascript: void(0);">
                             <i class="fe-briefcase"></i>
+                            <span> Discount price </span>
+                            <span class="menu-arrow"></span>
+                        </a>
+                        <ul class="nav-second-level" aria-expanded="false">
+                            <li><a href="{{route('admin.discount.price')}}"> Create Discount price</a></li>
+                            <li><a href="{{route('admin.discount.price.list')}}">Discount price List</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="javascript: void(0);">
+                            <i class="fe-briefcase"></i>
                             <span> Order Management </span>
                             <span class="menu-arrow"></span>
                         </a>
