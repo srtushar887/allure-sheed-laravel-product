@@ -3,10 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="f4b3f7c0-236e-469e-919a-0c5d9979af9f" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Admin/AdminProductsController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Admin/AdminProductsController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/views/frontend/productDetails.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/frontend/productDetails.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/layouts/admin.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/layouts/admin.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/web.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -245,7 +242,7 @@
       <workItem from="1591022370010" duration="13444000" />
       <workItem from="1591191118584" duration="7070000" />
       <workItem from="1591274172853" duration="222000" />
-      <workItem from="1591274403058" duration="4867000" />
+      <workItem from="1591274403058" duration="13697000" />
     </task>
     <servers />
   </component>
@@ -262,11 +259,11 @@
       <screen x="72" y="27" width="1294" height="741" />
     </state>
     <state x="348" y="27" width="746" height="741" key="#phpunit.xml/72.27.1294.741@72.27.1294.741" timestamp="1588768974729" />
-    <state x="1895" y="212" width="424" height="491" key="FileChooserDialogImpl" timestamp="1591207444081">
+    <state x="1895" y="212" width="428" height="481" key="FileChooserDialogImpl" timestamp="1591281085332">
       <screen x="1366" y="0" width="1366" height="768" />
     </state>
     <state x="529" y="203" width="378" height="336" key="FileChooserDialogImpl/0.0.1366.731@0.0.1366.731" timestamp="1586787105065" />
-    <state x="1895" y="212" key="FileChooserDialogImpl/0.0.1366.732/1366.0.1366.768@1366.0.1366.768" timestamp="1591207444081" />
+    <state x="1895" y="212" width="428" height="481" key="FileChooserDialogImpl/0.0.1366.732/1366.0.1366.768@1366.0.1366.768" timestamp="1591281085332" />
     <state x="529" y="203" width="428" height="481" key="FileChooserDialogImpl/0.0.1366.732@0.0.1366.732" timestamp="1587481009952" />
     <state x="2109" y="299" width="428" height="481" key="FileChooserDialogImpl/0.0.1366.734/1366.0.1920.1080@1366.0.1920.1080" timestamp="1584628956277" />
     <state x="529" y="203" width="378" height="327" key="FileChooserDialogImpl/0.0.1366.734@0.0.1366.734" timestamp="1585769384448" />

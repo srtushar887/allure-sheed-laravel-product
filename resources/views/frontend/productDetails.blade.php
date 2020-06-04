@@ -181,7 +181,7 @@
                                             <div class="shop-product__block__title">Width: </div>
                                             <select class="form-control width">
                                                 @foreach($width as $wt)
-                                                    <option>{{$wt->width}}</option>
+                                                    <option value="{{$wt->width}}">{{$wt->width}}</option>
                                                 @endforeach
                                             </select>
 
@@ -205,7 +205,7 @@
                                             <div class="shop-product__block__title">Length: </div>
                                             <select class="form-control length">
                                                 @foreach($length as $lt)
-                                                    <option>{{$lt->length}}</option>
+                                                    <option value="{{$lt->length}}">{{$lt->length}}</option>
                                                 @endforeach
                                             </select>
 
@@ -682,11 +682,19 @@
                         var len_val = $('.length').val();
 
                         if (len_fr == 0){
-                           var length = parseInt(len_val) + parseInt(1);
+                            var len_mins = parseInt(len_val) - parseInt(1);
+                            if (len_mins < 36){
+                                var length = (parseInt(len_val) + parseInt(1)) - parseInt(1);
+                            }else {
+                                var length = parseInt(len_val) - parseInt(1);
+                            }
                         }else {
-                            var length = $('.length').val();
+                            var length = parseInt(len_val) + parseInt(1);
+
                         }
+
                         console.log(length)
+
                         var schedule = $('.schedulename').val();
                         var catname = $('.catname').val();
                         var width  = parseInt(wd_val) + parseInt(1);
@@ -840,7 +848,7 @@
                                     'catname' : catname,
                                 },
                                 success:function(data){
-                                    var nprice = (data.regular_price)
+                                    var nprice = Math.floor(data.regular_price)
                                     var oldprr = $('.newPricepro').val();
 
                                     var catdis = $('.catdiscount').val();
@@ -865,13 +873,13 @@
 
                                         var finalproice = total - disprice;
 
-                                        var prrr = `<span class="discounted-price">$${finalproice}</span>`;
+                                        var prrr = `<span class="discounted-price">$${finalproice.toFixed(2)}</span>`;
                                         $('.pricecng').empty().html(prrr);
 
-                                        var totl = `<span class="discounted-price">Total: $${finalproice}</span>`;
+                                        var totl = `<span class="discounted-price">Total: $${finalproice.toFixed(2)}</span>`;
                                         $('.total').empty().html(totl);
 
-                                        $('.latestprice').empty().val(finalproice);
+                                        $('.latestprice').empty().val(finalproice.toFixed(2));
 
                                     }
 
@@ -1086,29 +1094,30 @@
                                 success:function(data){
 
                                     var schedule_name = data.schedule_name;
+                                    var n_price = Math.floor(data.regular_price);
+                                    console.log("price is " +n_price)
 
 
 
                                     var catdis = $('.catdiscount').val();
-                                    console.log(catdis)
 
 
                                     if (catdis == ""){
-                                        var prrr = `<span class="discounted-price">$${data.regular_price}</span>`;
+                                        var prrr = `<span class="discounted-price">$${n_price.toFixed(2)}</span>`;
                                         $('.pricecng').empty().html(prrr);
-                                        $('.newPricepro').val(data.regular_price);
-                                        $('.latestprice').empty().val(data.regular_price);
+                                        $('.newPricepro').val(n_price);
+                                        $('.latestprice').empty().val(n_price.toFixed(2));
 
                                     }else {
 
-                                        var disprice = (data.regular_price * catdis) / 100;
-                                        var finalprice = data.regular_price - disprice;
+                                        var disprice = (n_price * catdis) / 100;
+                                        var finalprice = n_price - disprice;
                                         console.log(finalprice)
-                                        var prrr = `<span class="discounted-price">$${finalprice}</span>`;
+                                        var prrr = `<span class="discounted-price">$${finalprice.toFixed(2)}</span>`;
                                         $('.pricecng').empty().html(prrr);
-                                        $('.newPricepro').val(data.regular_price);
+                                        $('.newPricepro').val(n_price.toFixed(2));
 
-                                        $('.latestprice').empty().val(finalprice);
+                                        $('.latestprice').empty().val(finalprice.toFixed(2));
 
                                     }
                                     $(".f1").prop("checked", false);
@@ -1316,7 +1325,7 @@
                                     'catname' : catname,
                                 },
                                 success:function(data){
-                                    var nprice = (data.regular_price)
+                                    var nprice = Math.floor(data.regular_price)
                                     var oldprr = $('.newPricepro').val();
 
                                     var catdis = $('.catdiscount').val();
@@ -1341,13 +1350,13 @@
 
                                         var finalproice = total - disprice;
 
-                                        var prrr = `<span class="discounted-price">$${finalproice}</span>`;
+                                        var prrr = `<span class="discounted-price">$${finalproice.toFixed(2)}</span>`;
                                         $('.pricecng').empty().html(prrr);
 
-                                        var totl = `<span class="discounted-price">Total: $${finalproice}</span>`;
+                                        var totl = `<span class="discounted-price">Total: $${finalproice.toFixed(2)}</span>`;
                                         $('.total').empty().html(totl);
 
-                                        $('.latestprice').empty().val(finalproice);
+                                        $('.latestprice').empty().val(finalproice.toFixed(2));
 
                                     }
 
@@ -1560,31 +1569,32 @@
                                     'catname' : catname,
                                 },
                                 success:function(data){
-
+                                    console.log(data)
                                     var schedule_name = data.schedule_name;
+                                    var n_price = Math.floor(data.regular_price);
+                                    console.log("price is " +n_price)
 
 
 
                                     var catdis = $('.catdiscount').val();
-                                    console.log(catdis)
 
 
                                     if (catdis == ""){
-                                        var prrr = `<span class="discounted-price">$${data.regular_price}</span>`;
+                                        var prrr = `<span class="discounted-price">$${n_price.toFixed(2)}</span>`;
                                         $('.pricecng').empty().html(prrr);
-                                        $('.newPricepro').val(data.regular_price);
-                                        $('.latestprice').empty().val(data.regular_price);
+                                        $('.newPricepro').val(n_price);
+                                        $('.latestprice').empty().val(n_price.toFixed(2));
 
                                     }else {
 
-                                        var disprice = (data.regular_price * catdis) / 100;
-                                        var finalprice = data.regular_price - disprice;
+                                        var disprice = (n_price * catdis) / 100;
+                                        var finalprice = n_price - disprice;
                                         console.log(finalprice)
-                                        var prrr = `<span class="discounted-price">$${finalprice}</span>`;
+                                        var prrr = `<span class="discounted-price">$${finalprice.toFixed(2)}</span>`;
                                         $('.pricecng').empty().html(prrr);
-                                        $('.newPricepro').val(data.regular_price);
+                                        $('.newPricepro').val(n_price.toFixed(2));
 
-                                        $('.latestprice').empty().val(finalprice);
+                                        $('.latestprice').empty().val(finalprice.toFixed(2));
 
                                     }
                                     $(".f1").prop("checked", false);
@@ -1634,22 +1644,36 @@
                         var lengt_val = $('.length').val();
                         var len_fr = $(this).val();
                         if (len_fr == 0){
-                            var length = $('.length').val();
+                            var len_mins = parseInt(lengt_val) - parseInt(1);
+                            if (len_mins < 36){
+                                var length = (parseInt(lengt_val) + parseInt(1)) - parseInt(1);
+                            }else {
+                                var length = parseInt(lengt_val) - parseInt(1);
+                            }
                         }else {
                             var length = parseInt(lengt_val) + parseInt(1);
                         }
+                        // console.log(length)
 
                         var wid_frac = $('.widtfrac').val();
                         var wid_val = $('.width').val();
                         if (wid_frac == 0){
-                            var width = $('.width').val();
-                            var wd = $('.width').val();
+                            var wd_mins = parseInt(wid_val) - parseInt(1);
+                            if (wd_mins < 24){
+                                var width = (parseInt(wid_val) + parseInt(1)) - parseInt(1);
+                                var wd = (parseInt(wid_val) + parseInt(1)) - parseInt(1);
+                            }else {
+                                var width = (parseInt(wid_val) + parseInt(1)) + parseInt(1);
+                                var wd = (parseInt(wid_val) + parseInt(1)) + parseInt(1);
+                            }
                         }else {
                             var width = parseInt(wid_val) + parseInt(1);
                             var wd = parseInt(wid_val) + parseInt(1);
-                            console.log(width)
-                            console.log(wd)
+
                         }
+
+                        console.log(width)
+                        console.log(wd)
                         var schedule = $('.schedulename').val();
                         var catname = $('.catname').val();
 
@@ -1805,9 +1829,9 @@
                             success:function(data){
                                 console.log(data)
                                 var schedule_name = data.schedule_name
-                                var n_price = data.regular_price
+                                var n_price = Math.floor(data.regular_price);
 
-                                var prrr = `<span class="discounted-price">$${data.regular_price}</span>`;
+                                var prrr = `<span class="discounted-price">$${n_price.toFixed(2)}</span>`;
                                 $('.pricecng').empty().html(prrr);
                                 $('.newPricepro').val(data.regular_price);
 
@@ -1849,27 +1873,27 @@
 
 
                                 if (catdis == ""){
-                                    var prrr = `<span class="discounted-price">$${total}</span>`;
+                                    var prrr = `<span class="discounted-price">$${total.toFixed(2)}</span>`;
                                     $('.pricecng').empty().html(prrr);
 
-                                    $('.latestprice').empty().val(total);
+                                    $('.latestprice').empty().val(total.toFixed(2));
 
                                 }else {
                                     var disprice = (total * catdis) / 100;
                                     var finalprice = total - disprice;
 
-                                    var prrr = `<span class="discounted-price">$${finalprice}</span>`;
+                                    var prrr = `<span class="discounted-price">$${finalprice.toFixed(2)}</span>`;
                                     $('.pricecng').empty().html(prrr);
 
-                                    $('.latestprice').empty().val(finalprice);
+                                    $('.latestprice').empty().val(finalprice.toFixed(2));
 
                                 }
 
 
 
                                 var oldtotalrice = $('.newPricepro').val();
-                                $('.total').empty().append(`Total: $${total}`);
-                                $('.product_price').empty().append(`Product Price: ${data.regular_price}`);
+                                $('.total').empty().append(`Total: $${total.toFixed(2)}`);
+                                $('.product_price').empty().append(`Product Price: ${n_price.toFixed(2)}`);
 
 
                             }
@@ -2049,9 +2073,9 @@
                             success:function(data){
                                 console.log(data)
                                 var schedule_name = data.schedule_name
-                                var n_price = data.regular_price
+                                var n_price = Math.floor(data.regular_price);
 
-                                var prrr = `<span class="discounted-price">$${data.regular_price}</span>`;
+                                var prrr = `<span class="discounted-price">$${n_price.toFixed(2)}</span>`;
                                 $('.pricecng').empty().html(prrr);
                                 $('.newPricepro').val(data.regular_price);
 
@@ -2093,27 +2117,27 @@
 
 
                                 if (catdis == ""){
-                                    var prrr = `<span class="discounted-price">$${total}</span>`;
+                                    var prrr = `<span class="discounted-price">$${total.toFixed(2)}</span>`;
                                     $('.pricecng').empty().html(prrr);
 
-                                    $('.latestprice').empty().val(total);
+                                    $('.latestprice').empty().val(total.toFixed(2));
 
                                 }else {
                                     var disprice = (total * catdis) / 100;
                                     var finalprice = total - disprice;
 
-                                    var prrr = `<span class="discounted-price">$${finalprice}</span>`;
+                                    var prrr = `<span class="discounted-price">$${finalprice.toFixed(2)}</span>`;
                                     $('.pricecng').empty().html(prrr);
 
-                                    $('.latestprice').empty().val(finalprice);
+                                    $('.latestprice').empty().val(finalprice.toFixed(2));
 
                                 }
 
 
 
                                 var oldtotalrice = $('.newPricepro').val();
-                                $('.total').empty().append(`Total: $${total}`);
-                                $('.product_price').empty().append(`Product Price: ${data.regular_price}`);
+                                $('.total').empty().append(`Total: $${total.toFixed(2)}`);
+                                $('.product_price').empty().append(`Product Price: ${n_price.toFixed(2)}`);
 
 
                             }
@@ -2134,23 +2158,32 @@
                             if($(this).is(":checked")){
                                 var oldprr = $('.newPricepro').val();
                                 var f1pr = $(this).val();
-                                var total =  parseInt(oldprr) + parseInt(f1pr);
+
+                                var npricee = $('.latestprice').val();
+                                var nprice = Math.floor(npricee);
+
+                                var total =  parseInt(nprice) + parseInt(f1pr);
 
                                 var catdis = $('.catdiscount').val();
-
-
                                 if (catdis == ""){
-                                    var prrr = `<span class="discounted-price">$${total}</span>`;
+                                    var prrr = `<span class="discounted-price">$${total.toFixed(2)}</span>`;
                                     $('.pricecng').empty().html(prrr);
 
-                                    $('.newPricepro').val(total);
+                                    $('.newPricepro').val(total.toFixed(2));
+
+                                     $('.latestprice').val(total.toFixed(2));
+
                                 }else {
                                     var disprice = (total * catdis) / 100;
                                     var finalprice = total - disprice;
-                                    var prrr = `<span class="discounted-price">$${finalprice}</span>`;
+                                    console.log(finalprice)
+                                    var prrr = `<span class="discounted-price">$${finalprice.toFixed(2)}</span>`;
                                     $('.pricecng').empty().html(prrr);
 
-                                    $('.newPricepro').val(total);
+                                    $('.newPricepro').val(total.toFixed(2));
+
+                                     $('.latestprice').val(finalprice.toFixed(2));
+
 
                                 }
 
@@ -2161,18 +2194,21 @@
                                 $('.optionPrice').val(newopprice);
                                 $('.option_price').empty().append(`Options Price: $${newopprice}`);
 
-                                var oldtotalrice = $('.newPricepro').val();
+                                var oldtotalrice = $('.latestprice').val();
                                 $('.total').empty().append(`Total: $${oldtotalrice}`);
                             }
 
                             if($(this).is(":not(:checked)")){
                                 var oldprr = $('.newPricepro').val();
+                                var nn_price = $('.latestprice').val();
+                                var nprice = Math.floor(nn_price);
+
                                 var f1pr = $(this).val();
-                                var total =  parseInt(oldprr) - parseInt(f1pr);
-                                var prrr = `<span class="discounted-price">$${total}</span>`;
+                                var total =  parseInt(nprice) - parseInt(f1pr);
+                                var prrr = `<span class="discounted-price">$${total.toFixed(2)}</span>`;
                                 $('.pricecng').empty().html(prrr);
 
-                                $('.newPricepro').val(total);
+                                $('.newPricepro').val(total.toFixed(2));
 
 
                                 var oldopprice = $('.optionPrice').val();
@@ -2181,13 +2217,18 @@
 
 
                                 $('.optionPrice').val(newopprice);
-                                $('.option_price').empty().append(`Options Price: $${newopprice}`);
+                                $('.option_price').empty().append(`Options Price: $${newopprice.toFixed(2)}`);
 
-                                var oldtotalrice = $('.newPricepro').val();
-                                $('.total').empty().append(`Total: $${oldtotalrice}`);
+                                var oldtotalricee = $('.latestprice').val();
+                                var oldtotalrice = Math.floor(oldtotalricee);
+                                $('.total').empty().append(`Total: $${oldtotalrice.toFixed(2)}`);
 
-                                var oldtotalrice = $('.newPricepro').val();
-                                $('.total').empty().append(`Total: $${oldtotalrice}`);
+                                var oldtotalricee = $('.latestprice').val();
+                                var oldtotalrice = Math.floor(oldtotalricee);
+                                $('.total').empty().append(`Total: $${oldtotalrice.toFixed(2)}`);
+
+                                $('.latestprice').val(total.toFixed(2));
+
                             }
                         }
 
@@ -2201,11 +2242,17 @@
                         if($(this).is(":checked")){
                             var oldprr = $('.newPricepro').val();
                             var f2pr = $(this).val();
-                            var total =  parseInt(oldprr) + parseInt(f2pr);
-                            var prrr = `<span class="discounted-price">$${total}</span>`;
+
+                            var npricee = $('.latestprice').val();
+                            var nprice = Math.floor(npricee);
+
+                            var total =  parseInt(nprice) + parseInt(f2pr);
+                            var prrr = `<span class="discounted-price">$${total.toFixed(2)}</span>`;
                             $('.pricecng').empty().html(prrr);
 
-                            $('.newPricepro').val(total);
+                            $('.newPricepro').val(total.toFixed(2));
+                            $('.latestprice').val(total.toFixed(2));
+
 
                             var oldopprice = $('.optionPrice').val();
                             var newopprice = parseInt(oldopprice) + parseInt(f2pr);
@@ -2214,17 +2261,23 @@
 
                             $('.option_price').empty().append(`Options Price: $${newopprice}`);
 
-                            var oldtotalrice = $('.newPricepro').val();
+                            var oldtotalrice = $('.latestprice').val();
                             $('.total').empty().append(`Total: $${oldtotalrice}`);
                         }
                         if($(this).is(":not(:checked)")){
                             var oldprr = $('.newPricepro').val();
                             var f2pr = $(this).val();
-                            var total =  parseInt(oldprr) - parseInt(f2pr);
-                            var prrr = `<span class="discounted-price">$${total}</span>`;
+
+                            var npricee = $('.latestprice').val();
+                            var nprice = Math.floor(npricee);
+
+                            var total =  parseInt(nprice) - parseInt(f2pr);
+                            var prrr = `<span class="discounted-price">$${total.toFixed(2)}</span>`;
                             $('.pricecng').empty().html(prrr);
 
                             $('.newPricepro').val(total);
+
+                            $('.latestprice').val(total.toFixed(2));
 
                             var oldopprice = $('.optionPrice').val();
                             var newopprice = parseInt(oldopprice) - parseInt(f2pr);
@@ -2232,7 +2285,7 @@
                             $('.optionPrice').val(newopprice);
                             $('.option_price').empty().append(`Options Price: $${newopprice}`);
 
-                            var oldtotalrice = $('.newPricepro').val();
+                            var oldtotalrice = $('.latestprice').val();
                             $('.total').empty().append(`Total: $${oldtotalrice}`);
                         }
 
@@ -2245,11 +2298,16 @@
                         if($(this).is(":checked")){
                             var oldprr = $('.newPricepro').val();
                             var f3pr = $(this).val();
-                            var total =  parseInt(oldprr) + parseInt(f3pr);
-                            var prrr = `<span class="discounted-price">$${total}</span>`;
+                            var npricee = $('.latestprice').val();
+                            var nprice = Math.floor(npricee);
+
+                            var total =  parseInt(nprice) + parseInt(f3pr);
+                            var prrr = `<span class="discounted-price">$${total.toFixed(2)}</span>`;
                             $('.pricecng').empty().html(prrr);
 
-                            $('.newPricepro').val(total);
+                            $('.newPricepro').val(total.toFixed(2));
+
+                            $('.latestprice').val(total.toFixed(2));
 
                             var oldopprice = $('.optionPrice').val();
                             var newopprice = parseInt(oldopprice) + parseInt(f3pr);
@@ -2257,17 +2315,23 @@
                             $('.optionPrice').val(newopprice);
                             $('.option_price').empty().append(`Options Price: $${newopprice}`);
 
-                            var oldtotalrice = $('.newPricepro').val();
+                            var oldtotalrice = $('.latestprice').val();
                             $('.total').empty().append(`Total: $${oldtotalrice}`);
                         }
                         if($(this).is(":not(:checked)")){
                             var oldprr = $('.newPricepro').val();
                             var f3pr = $(this).val();
-                            var total =  parseInt(oldprr) - parseInt(f3pr);
-                            var prrr = `<span class="discounted-price">$${total}</span>`;
+
+                            var npricee = $('.latestprice').val();
+                            var nprice = Math.floor(npricee);
+
+                            var total =  parseInt(nprice) - parseInt(f3pr);
+                            var prrr = `<span class="discounted-price">$${total.toFixed(2)}</span>`;
                             $('.pricecng').empty().html(prrr);
 
-                            $('.newPricepro').val(total);
+                            $('.newPricepro').val(total.toFixed());
+
+                            $('.latestprice').val(total.toFixed(2));
 
                             var oldopprice = $('.optionPrice').val();
                             var newopprice = parseInt(oldopprice) - parseInt(f3pr);
@@ -2275,7 +2339,7 @@
                             $('.optionPrice').val(newopprice);
                             $('.option_price').empty().append(`Options Price: $${newopprice}`);
 
-                            var oldtotalrice = $('.newPricepro').val();
+                            var oldtotalrice = $('.latestprice').val();
                             $('.total').empty().append(`Total: $${oldtotalrice}`);
                         }
 
