@@ -227,7 +227,10 @@
 
                                         <br>
                                         <div class="shop-product__price mb-30 pricecng">
-                                            <span class="discounted-price">${{min($min_array)}}</span>
+                                            <?php
+                                                $abc = 1235.23657
+                                            ?>
+                                            <span class="discounted-price">${{number_format($abc,2)}}</span>
                                         </div>
                                         <h4 class="addacc">Addon Accessories</h4>
                                         <div class="shop-product__block shop-product__block--size mb-20">
@@ -273,7 +276,7 @@
                                                         <br>
                                                         <li class="mb-0 pt-0 pb-0 mr-10"><span class="product_price">Product Price: ${{min($min_array)}}</span></li>
                                                         <br>
-                                                        <li class="mb-0 pt-0 pb-0 mr-10"><span class="total">Total: ${{min($min_array)}}</span></li>
+                                                        <li class="mb-0 pt-0 pb-0 mr-10"><span class="total">Total: ${{number_format(min($min_array),2)}}</span></li>
 
                                                     </ul>
                                                 </div>
@@ -299,7 +302,7 @@
                                             <input type="hidden" class="totalPrice" value="0.00" >
                                             <input type="hidden" class="proPrice" value="{{min($min_array)}}" >
                                             <input type="hidden" class="proid" name="pro_id" value="{{$product_details->id}}" >
-                                            <input type="text" class="latestprice" name="latest_price" value="{{min($min_array)}}" >
+                                            <input type="hidden" class="latestprice" name="latest_price" value="{{min($min_array)}}" >
 
 
                                             <?php
@@ -657,20 +660,20 @@
                         var totl = `<span class="discounted-price">Total: $${oldprr1}</span>`;
                         $('.total').empty().html(totl);
 
-                        $('.latestprice').val(oldprr1)
+                        $('.latestprice').val(oldprr1.toFixed(2))
 
                     }else {
                         var disprice = (oldprr1 * catdis1 ) / 100
 
                         var finalproice = oldprr1 - disprice;
 
-                        var prrr = `<span class="discounted-price">$${finalproice}</span>`;
+                        var prrr = `<span class="discounted-price">$${finalproice.toFixed(2)}</span>`;
                         $('.pricecng').empty().html(prrr);
 
-                        var totl = `<span class="discounted-price">Total: $${finalproice}</span>`;
+                        var totl = `<span class="discounted-price">Total: $${finalproice.toFixed(2)}</span>`;
                         $('.total').empty().html(totl);
 
-                        $('.latestprice').val(finalproice)
+                        $('.latestprice').val(finalproice.toFixed(2))
 
                     }
 
@@ -678,6 +681,7 @@
                     //********* withd fraction
                     $('.widtfrac').change(function () {
                         var wd_val = $('.width').val();
+                        var wd_fr = $(this).val();
                         var len_fr = $('.lengthfrac').val();
                         var len_val = $('.length').val();
 
@@ -693,12 +697,26 @@
 
                         }
 
-                        console.log(length)
-
                         var schedule = $('.schedulename').val();
                         var catname = $('.catname').val();
-                        var width  = parseInt(wd_val) + parseInt(1);
-                        var wd = parseInt(wd_val) + parseInt(1);
+
+                        if (wd_fr == 0){
+                            var wid_mins = parseInt(wd_val) - parseInt(1);
+                            if (wid_mins < 24){
+                                var width  = (parseInt(wd_val) + parseInt(1)) - parseInt(1);
+                                var wd = (parseInt(wd_val) + parseInt(1)) - parseInt(1);
+                            }else {
+                                var width  = (parseInt(wd_val) + parseInt(1)) - parseInt(1);
+                                var wd = (parseInt(wd_val) + parseInt(1)) - parseInt(1);
+                            }
+                        }else {
+                            var width  = parseInt(wd_val)  + parseInt(1);
+                            var wd = parseInt(wd_val)  + parseInt(1);
+                        }
+
+
+                        // var width  = parseInt(wd_val) + parseInt(1);
+                        // var wd = parseInt(wd_val) + parseInt(1);
                         // vishion blind
                         if(catname == 'Vision Blinds'){
 
@@ -885,12 +903,6 @@
 
                                     var propice = `<span class="product_price">Product Price: $${oldprr}</span>`;
                                     $('.product_price').empty().html(propice);
-
-
-
-
-
-
 
                                 }
                             });
@@ -1337,13 +1349,13 @@
                                     var total =  parseInt(nprice) + parseInt(f4pr);
                                     if (catdis == ""){
                                         console.log('nai')
-                                        var prrr = `<span class="discounted-price">$${total}</span>`;
+                                        var prrr = `<span class="discounted-price">$${total.toFixed(2)}</span>`;
                                         $('.pricecng').empty().html(prrr);
 
-                                        var totl = `<span class="discounted-price">Total: $${total}</span>`;
+                                        var totl = `<span class="discounted-price">Total: $${total.toFixed(2)}</span>`;
                                         $('.total').empty().html(totl);
 
-                                        $('.latestprice').empty().val(total);
+                                        $('.latestprice').empty().val(total.toFixed(2));
 
                                     }else {
                                         var disprice = (total * catdis ) / 100
@@ -1358,14 +1370,13 @@
 
                                         $('.latestprice').empty().val(finalproice.toFixed(2));
 
+                                        var ttl = `<span class="product_price">Total: $${finalproice.toFixed(2)}</span>`;
+                                        $('.total').empty().html(ttl);
+
                                     }
 
                                         var propice = `<span class="product_price">Product Price: $${oldprr}</span>`;
                                         $('.product_price').empty().html(propice);
-
-
-
-
 
 
 
@@ -1616,9 +1627,9 @@
                                     }
                                     $('.pricecng').show();
 
-                                    var oldtotalrice = $('.newPricepro').val();
-                                    $('.total').empty().append(`Total: $${oldtotalrice}`);
-                                    $('.product_price').empty().append(`Product Price: ${data.regular_price}`);
+                                    var oldtotalrice = Math.floor($('.latestprice').val());
+                                    $('.total').empty().append(`Total: $${oldtotalrice.toFixed(2)}`);
+                                    $('.product_price').empty().append(`Product Price: ${oldtotalrice.toFixed(2)}`);
 
                                 }
                             });
@@ -1673,6 +1684,7 @@
                         }
 
                         console.log(width)
+                        console.log(length)
                         console.log(wd)
                         var schedule = $('.schedulename').val();
                         var catname = $('.catname').val();
