@@ -4,7 +4,6 @@
         .card {
             width: 100px;
             height: 100px;
-            background: url("") no-repeat;
             margin:auto;
         }
 
@@ -14,14 +13,13 @@
             transform: scale(2);
         }
         .button {
-            width: 150px;
+            width: 200px;
             background-color: #FFF;
             border:none;
             display: inline-block;
         }
         .padd{
             padding-bottom:50px;
-            margin:auto;
         }
     </style>
 @stop
