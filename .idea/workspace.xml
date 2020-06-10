@@ -3,6 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="f4b3f7c0-236e-469e-919a-0c5d9979af9f" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/FrontendController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/FrontendController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/views/frontend/productDetails.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/frontend/productDetails.blade.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -246,7 +247,9 @@
       <workItem from="1591364906715" duration="2606000" />
       <workItem from="1591376231804" duration="8000" />
       <workItem from="1591627232805" duration="2327000" />
-      <workItem from="1591686128038" duration="647000" />
+      <workItem from="1591686128038" duration="1839000" />
+      <workItem from="1591701949177" duration="54000" />
+      <workItem from="1591779054771" duration="385000" />
     </task>
     <servers />
   </component>
@@ -263,7 +266,7 @@
       <screen x="72" y="27" width="1294" height="741" />
     </state>
     <state x="348" y="27" width="746" height="741" key="#phpunit.xml/72.27.1294.741@72.27.1294.741" timestamp="1588768974729" />
-    <state x="1895" y="204" width="428" height="481" key="FileChooserDialogImpl" timestamp="1591633004672">
+    <state x="1895" y="204" width="428" height="481" key="FileChooserDialogImpl" timestamp="1591702002154">
       <screen x="1366" y="0" width="1366" height="738" />
     </state>
     <state x="529" y="203" width="378" height="336" key="FileChooserDialogImpl/0.0.1366.731@0.0.1366.731" timestamp="1586787105065" />
@@ -271,7 +274,7 @@
     <state x="529" y="203" width="428" height="481" key="FileChooserDialogImpl/0.0.1366.732@0.0.1366.732" timestamp="1587481009952" />
     <state x="2109" y="299" width="428" height="481" key="FileChooserDialogImpl/0.0.1366.734/1366.0.1920.1080@1366.0.1920.1080" timestamp="1584628956277" />
     <state x="529" y="203" width="378" height="327" key="FileChooserDialogImpl/0.0.1366.734@0.0.1366.734" timestamp="1585769384448" />
-    <state x="1895" y="204" key="FileChooserDialogImpl/0.0.1366.736/1366.0.1366.738@1366.0.1366.738" timestamp="1591633004672" />
+    <state x="1895" y="204" key="FileChooserDialogImpl/0.0.1366.736/1366.0.1366.738@1366.0.1366.738" timestamp="1591702002154" />
     <state x="529" y="204" key="FileChooserDialogImpl/0.0.1366.736@0.0.1366.736" timestamp="1586447565851" />
     <state x="565" y="232" width="374" height="338" key="FileChooserDialogImpl/58.27.1308.741@58.27.1308.741" timestamp="1586193017471" />
     <state x="1895" y="212" width="424" height="491" key="FileChooserDialogImpl/72.27.1294.741/1366.0.1366.768@1366.0.1366.768" timestamp="1591036561453" />

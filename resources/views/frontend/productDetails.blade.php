@@ -301,6 +301,7 @@
                                             <input type="hidden" class="proPrice" value="{{min($min_array)}}" >
                                             <input type="hidden" class="proid" name="pro_id" value="{{$product_details->id}}" >
                                             <input type="hidden" class="latestprice" name="latest_price" value="{{min($min_array)}}" >
+                                            <input type="hidden" class="" name="product_id" value="{{$product_details->id}}" >
 
 
                                             <?php
@@ -647,7 +648,7 @@
 
 
                     var catnam = $('.catname').val();
-                    var oldprr1 = $('.newPricepro').val();
+                    var oldprr1 = Math.floor($('.newPricepro').val());
                     var catdis1 = $('.catdiscount').val();
 
 

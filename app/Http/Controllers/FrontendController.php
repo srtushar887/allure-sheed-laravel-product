@@ -203,7 +203,8 @@ class FrontendController extends Controller
 
     public function add_to_cart(Request $request)
     {
-        $product_id = $request->pro_id;
+        $product_id = $request->product_id;
+
         $product_qty = $request->qty;
 
         $product = product::where('id',$product_id)->first();
